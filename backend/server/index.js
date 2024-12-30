@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const router = express.Router();
 
-const { createBeverage, getAllBeverages, getBeverageById , getMealsById , getAllMeals , createMeal, createSnacks,getSnacksById ,getAllSnacks } = require('./queries');
+const { createBeverage, deleteBeverageById, deleteSnackById ,deleteMealById,getAllBeverages, getBeverageById , getMealsById , getAllMeals , createMeal, createSnacks,getSnacksById ,getAllSnacks} = require('./queries');
 const { error } = require('console');
 
 const app = express();
@@ -114,6 +115,96 @@ app.get('/meals/:id',async(req,res)=>{
         res.status(500).json({error : 'Internal server error'})
     }
 })
+
+app.delete('/beverages/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        console.log('Received delete request for beverage ID:', id);
+
+        if (!id || isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid beverage ID' });
+        }
+
+        const deletedBeverage = await deleteBeverageById(id);
+        
+        if (!deletedBeverage) {
+            return res.status(404).json({ error: 'Beverage not found' });
+        }
+
+        res.json({ 
+            message: 'Beverage deleted successfully',
+            id: deletedBeverage.id 
+        });
+
+    } catch (error) {
+        console.error('Server error while deleting beverage:', error);
+        res.status(500).json({ 
+            error: 'Internal server error', 
+            details: error.message 
+        });
+    }
+});
+
+app.delete('/meals/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        console.log('Received delete request for meal ID:', id);
+
+        if (!id || isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid meal ID' });
+        }
+
+        const deletedMeal = await deleteMealById(id);
+        
+        if (!deletedMeal) {
+            return res.status(404).json({ error: 'Meal not found' });
+        }
+
+        res.json({ 
+            message: 'Meal deleted successfully',
+            id: deletedMeal.id 
+        });
+
+    } catch (error) {
+        console.error('Server error while deleting meal:', error);
+        res.status(500).json({ 
+            error: 'Internal server error', 
+            details: error.message 
+        });
+    }
+});
+
+app.delete('/snacks/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        console.log('Received delete request for snack ID:', id);
+
+        if (!id || isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid snack ID' });
+        }
+
+        const deletedSnack = await deleteSnackById(id);
+        
+        if (!deletedSnack) {
+            return res.status(404).json({ error: 'Snack not found' });
+        }
+
+        res.json({ 
+            message: 'Snack deleted successfully',
+            id: deletedSnack.id 
+        });
+
+    } catch (error) {
+        console.error('Server error while deleting snack:', error);
+        res.status(500).json({ 
+            error: 'Internal server error', 
+            details: error.message 
+        });
+    }
+});
 
 
 app.listen(port, () => {

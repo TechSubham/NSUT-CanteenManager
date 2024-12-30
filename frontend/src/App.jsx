@@ -11,6 +11,9 @@ import PrivateRoute from "./contexts/authContext/PrivateRoute";
 import Beverage from "./Pages/Beverage/page"
 import Meal from "./Pages/Meals/page"
 import Snack from "./Pages/Snacks/page"
+import BeverageTable from "./Pages/Table/beveragetable";
+import SnackTable from "./Pages/Table/Snackstable";
+import MealTable from "./Pages/Table/mealtable";
 
 const App = () => {
   return (
@@ -50,7 +53,30 @@ const App = () => {
               </PrivateRoute>
             }
           />
-          
+          <Route
+            path="/BeverageTable"
+            element={
+              <PrivateRoute>
+                <BeverageTable />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/Snackstable"
+            element={
+              <PrivateRoute>
+                <SnackTable />
+              </PrivateRoute>
+            }
+          />   
+          <Route
+            path="/mealtable"
+            element={
+              <PrivateRoute>
+                <MealTable />
+              </PrivateRoute>
+            }
+          />   
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>

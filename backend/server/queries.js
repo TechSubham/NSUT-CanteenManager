@@ -165,6 +165,7 @@ const getSnacksById = async (id) => {
         throw error;
     }
 };
+
 const getMealsById = async (id) => {
     const query = 'SELECT * FROM meals WHERE id = $1';
     
@@ -173,6 +174,41 @@ const getMealsById = async (id) => {
         return result.rows[0];
     } catch (error) {
         console.error('Error fetching meals:', error);
+        throw error;
+    }
+};
+
+const deleteBeverageById = async (id) => {
+    const query = 'DELETE FROM beverages WHERE id = $1 RETURNING *';
+    
+    try {
+        const result = await pool.query(query, [id]);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error deleting beverage:', error);
+        throw error;
+    }
+};
+const deleteMealById = async (id) => {
+    const query = 'DELETE FROM meals WHERE id = $1 RETURNING *';
+    
+    try {
+        const result = await pool.query(query, [id]);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error deleting meal:', error);
+        throw error;
+    }
+};
+
+const deleteSnackById = async (id) => {
+    const query = 'DELETE FROM snacks WHERE id = $1 RETURNING *';
+    
+    try {
+        const result = await pool.query(query, [id]);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error deleting snack:', error);
         throw error;
     }
 };
@@ -186,5 +222,8 @@ module.exports = {
     getMealsById,
     getAllSnacks,
     getSnacksById,
-    createSnacks
+    createSnacks,
+    deleteBeverageById,
+    deleteSnackById,
+    deleteMealById,
 };
