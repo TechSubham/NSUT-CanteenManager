@@ -6,8 +6,11 @@ import {
   Utensils,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function Home() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-green-600 text-white">
@@ -19,24 +22,16 @@ export default function Home() {
           <nav>
             <ul className="flex space-x-4">
               <li>
-                <a href="#" className="hover:underline">
-                  Dashboard
-                </a>
+                <a href="#" className="hover:underline">Dashboard</a>
               </li>
               <li>
-                <a href="#" className="hover:underline">
-                  Menu
-                </a>
+                <a href="#" className="hover:underline">Menu</a>
               </li>
               <li>
-                <a href="#" className="hover:underline">
-                  Orders
-                </a>
+                <a href="#" className="hover:underline">Orders</a>
               </li>
               <li>
-                <a href="#" className="hover:underline">
-                  Reports
-                </a>
+                <a href="#" className="hover:underline">Reports</a>
               </li>
             </ul>
           </nav>
@@ -48,8 +43,7 @@ export default function Home() {
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl font-bold mb-4">Welcome to CanteenPro</h1>
             <p className="text-xl mb-8">
-              Streamline your canteen operations with our powerful management
-              system
+              Streamline your canteen operations with our powerful management system
             </p>
             <button className="bg-white text-green-600 px-6 py-2 rounded-full font-semibold hover:bg-green-100 transition duration-300">
               Get Started
@@ -59,16 +53,13 @@ export default function Home() {
 
         <section className="py-20">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Key Features
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
                   icon: ClipboardList,
                   title: "Menu Management",
                   description: "Easily update and organize your menu items",
-                  link: "/Snacks",
                 },
                 {
                   icon: ShoppingCart,
@@ -81,27 +72,46 @@ export default function Home() {
                   description: "Generate comprehensive financial reports",
                 },
               ].map((feature, index) => (
-                <div key={index} className="text-center">
-                  {feature.link ? (
-                    <Link to={feature.link} className="block">
-                      <feature.icon
-                        size={48}
-                        className="mx-auto mb-4 text-green-600"
-                      />
-                      <h3 className="text-xl font-semibold mb-2">
+                <div key={index} className="text-center relative">
+                  {feature.title === "Menu Management" ? (
+                    <div
+                      onMouseEnter={() => setIsDropdownOpen(true)}
+                      onMouseLeave={() => setIsDropdownOpen(false)}
+                      className="relative inline-block"
+                    >
+                      <feature.icon size={48} className="mx-auto mb-4 text-green-600" />
+                      <h3 className="text-xl font-semibold mb-2 cursor-pointer">
                         {feature.title}
                       </h3>
                       <p className="text-gray-600">{feature.description}</p>
-                    </Link>
+
+                      {isDropdownOpen && (
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-40 bg-white shadow-lg rounded-md z-10">
+                          <ul className="py-2">
+                            <li>
+                              <Link
+                                to="/Snacks"
+                                className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                              >
+                                Add Snack
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                to="/Inventory"
+                                className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                              >
+                                Check Inventory
+                              </Link>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <>
-                      <feature.icon
-                        size={48}
-                        className="mx-auto mb-4 text-green-600"
-                      />
-                      <h3 className="text-xl font-semibold mb-2">
-                        {feature.title}
-                      </h3>
+                      <feature.icon size={48} className="mx-auto mb-4 text-green-600" />
+                      <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                       <p className="text-gray-600">{feature.description}</p>
                     </>
                   )}
@@ -113,9 +123,7 @@ export default function Home() {
 
         <section className="bg-gray-100 py-20">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Canteen Stats
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">Canteen Stats</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {[
                 { icon: Utensils, value: "1000+", label: "Daily Meals Served" },
@@ -124,10 +132,7 @@ export default function Home() {
                 { icon: DollarSign, value: "$10k+", label: "Monthly Revenue" },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
-                  <stat.icon
-                    size={36}
-                    className="mx-auto mb-4 text-green-600"
-                  />
+                  <stat.icon size={36} className="mx-auto mb-4 text-green-600" />
                   <p className="text-2xl font-bold mb-2">{stat.value}</p>
                   <p className="text-gray-600">{stat.label}</p>
                 </div>
@@ -142,26 +147,18 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <span className="text-2xl font-bold">CanteenPro</span>
-              <p className="text-sm mt-2">
-                © 2023 CanteenPro. All rights reserved.
-              </p>
+              <p className="text-sm mt-2">© 2023 CanteenPro. All rights reserved.</p>
             </div>
             <nav>
               <ul className="flex space-x-4">
                 <li>
-                  <a href="#" className="hover:text-green-400">
-                    Privacy Policy
-                  </a>
+                  <a href="#" className="hover:text-green-400">Privacy Policy</a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-green-400">
-                    Terms of Service
-                  </a>
+                  <a href="#" className="hover:text-green-400">Terms of Service</a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-green-400">
-                    Contact Us
-                  </a>
+                  <a href="#" className="hover:text-green-400">Contact Us</a>
                 </li>
               </ul>
             </nav>
