@@ -1,13 +1,11 @@
 const Pool = require("pg").Pool;
 
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "CanteenManagement",
-    password: "Subham@123",
-    port: 5432,
-
-})
+    connectionString:"postgresql://canteen_project_user:ZtoxHPJ5fhFLxQEMchh6VLSbupiz89my@dpg-cu2agijv2p9s738pknr0-a.singapore-postgres.render.com/canteen_project",
+    ssl: {
+        rejectUnauthorized: false,
+      },
+});
 pool.connect((err) => {
     if (err) {
         console.log("Error Connecting to the Database", err);
