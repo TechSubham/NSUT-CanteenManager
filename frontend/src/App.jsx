@@ -11,19 +11,21 @@ import PrivateRoute from "./contexts/authContext/PrivateRoute";
 import Beverage from "./Pages/Beverage/page";
 import Meal from "./Pages/Meals/page";
 import Snack from "./Pages/Snacks/page"; 
+import Dashboard from './Pages/Dashboard/main'
 import BeverageTable from "./Pages/Table/beveragetable";
 import SnackTable from "./Pages/Table/Snackstable";
 import MealTable from "./Pages/Table/mealtable";
 import AddSnackPage from "./components/ui/AddSnackPage";
 import InventoryPage from "./components/ui/InventoryPage";
 import { InventoryProvider } from "./contexts/authContext/InventoryContext";
-
+import Navbar from "./components/ui/Navbar";
 const App = () => {
   return (
     <Router>
       <AuthProvider>
+        <Navbar/>
         <InventoryProvider>
-          <Routes>
+          <Routes >
             {/* Route for Login */}
             <Route path="/login" element={<Login />} />
 
@@ -98,6 +100,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <InventoryPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
                 </PrivateRoute>
               }
             />

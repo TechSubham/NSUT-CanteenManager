@@ -22,7 +22,7 @@ export default function Home() {
           <nav>
             <ul className="flex space-x-4">
               <li>
-                <a href="#" className="hover:underline">Dashboard</a>
+                <a href="/dashboard" className="hover:underline">Dashboard</a>
               </li>
               <li>
                 <a href="#" className="hover:underline">Menu</a>
