@@ -21,10 +21,12 @@ import { InventoryProvider } from "./contexts/authContext/InventoryContext";
 import Navbar from "./components/ui/Navbar";
 import CompletedOrders from "./Admin/Orders/CompletedOrders";
 import ReceiptPopup from "./Admin/Orders/ReceiptPopup";
+import { FoodProvider } from "./contexts/BackendContext/FoodContext";
 const App = () => {
   return (
     <Router>
       <AuthProvider>
+        <FoodProvider>
         <Navbar />
         <InventoryProvider>
           <Routes>
@@ -133,6 +135,7 @@ const App = () => {
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </InventoryProvider>
+        </FoodProvider>
       </AuthProvider>
     </Router>
   );

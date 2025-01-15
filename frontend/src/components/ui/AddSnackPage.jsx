@@ -1,12 +1,24 @@
 import { useState, useEffect } from "react";
-import { useInventory } from "../../contexts/authContext/InventoryContext";
 import { useForm } from "react-hook-form";
 import { useFood } from "@/contexts/BackendContext/FoodContext";
+import toast from "react-hot-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useNavigate } from "react-router-dom";
 
 export default function AddSnackPage() {
-  const {beverages,loading,addBeverage,addMeal,addSnack,error}=useFood();
+  const navigate=useNavigate();
+  const { addBeverage, addMeal, addSnack } = useFood();
   const [image, setImage] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
+  const [showDialog, setShowDialog] = useState(false); // Controls the alert dialog
   const category = ["Beverages", "Meals", "Snacks"];
 
   const {
@@ -20,29 +32,31 @@ export default function AddSnackPage() {
     setImage(URL.createObjectURL(e.target.files[0]));
   };
 
-  const onSubmit = (data) => {
-    const newSnack = {
-      ...data,
-      image,
-    };
-    console.log(newSnack);
-    if(newSnack.category==="Beverages"){
-      const response=addBeverage(...data,image);
-      console.log("Adding Beverage",response);
+  const onSubmit = async (data) => {
+    const newSnack = { ...data, image };
+    toast.loading("Adding item...");
+    try {
+      let response;
+      if (newSnack.category === "Beverages") {
+        response = await addBeverage(newSnack);
+      } else if (newSnack.category === "Meals") {
+        response = await addMeal(newSnack);
+      } else if (newSnack.category === "Snacks") {
+        response = await addSnack(newSnack);
+      }
+      if(response.status==200 || response.status==201){
+      toast.dismiss();
+      toast.success("Item added successfully!");
     }
-    if(newSnack.category==="Meals"){
-      const response=addBeverage(...data,image);
-      console.log("Adding meals",response);
+      console.log("Item added:", response);
+
+      setShowDialog(true); 
+    } catch (err) {
+      toast.dismiss();
+      toast.error("Failed to add the item. Please try again.");
+      console.log("Error is ",error);
+      console.error("Error adding item:", err);
     }
-    if(newSnack.category==="Snacks"){
-      const response=addBeverage(...data,image);
-      console.log("",response);
-    }
-    addSnack(newSnack);
-    setShowPopup(true);
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 3000);
   };
 
   useEffect(() => {
@@ -54,24 +68,29 @@ export default function AddSnackPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Success Popup */}
-      {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center text-center border-4 border-green-500">
-            <div className="text-green-500 text-6xl mb-4">
-              <span role="img" aria-label="check mark">
-                ✔️
-              </span>
-            </div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Snack Added</h2>
-            <p className="text-gray-600">
-              The snack has been successfully added to the inventory.
-            </p>
-          </div>
-        </div>
+      {showDialog && (
+        <AlertDialog>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Item Added Successfully</AlertDialogTitle>
+              <AlertDialogDescription>
+                The item has been successfully added to the menu!
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowDialog(false)}>
+  Add another item
+</AlertDialogCancel>
+<AlertDialogCancel onClick={() => navigate('/homepage')}>
+  Go to inventory page
+</AlertDialogCancel>
+
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
 
-      <h1 className="text-3xl font-bold mb-6">Add New Snack</h1>
+      <h1 className="text-3xl font-bold mb-6">Add New Item</h1>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -82,7 +101,7 @@ export default function AddSnackPage() {
           {image ? (
             <img
               src={image}
-              alt="Snack Preview"
+              alt="Item Preview"
               className="w-full h-48 object-cover rounded-lg"
             />
           ) : (
@@ -93,7 +112,9 @@ export default function AddSnackPage() {
                 onChange={handleImageUpload}
                 className="hidden"
               />
-              <span className="text-gray-500">Upload Snack Image</span>
+              <span className="text-gray-500 font-bold">
+                Upload Item Image
+              </span>
             </label>
           )}
         </div>
@@ -102,14 +123,14 @@ export default function AddSnackPage() {
         <div className="w-2/3 p-6">
           <div className="mb-4">
             <label htmlFor="snackName" className="block text-gray-700 font-semibold mb-2">
-              Snack Name
+              Item Name
             </label>
             <input
               type="text"
               id="snackName"
-              placeholder="Enter snack name"
+              placeholder="Enter item name"
               className="w-full border rounded-md px-3 py-2 shadow-sm"
-              {...register("snackName", { required: "Snack name is required" })}
+              {...register("snackName", { required: "Item name is required" })}
             />
             {errors.snackName && (
               <span className="text-sm text-red-500">{errors.snackName.message}</span>
@@ -200,7 +221,7 @@ export default function AddSnackPage() {
             type="submit"
             className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition w-full"
           >
-            Add Snack
+            Add Item
           </button>
         </div>
       </form>
