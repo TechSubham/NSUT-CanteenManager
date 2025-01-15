@@ -10,6 +10,15 @@ import { useState } from "react";
 
 export default function Home() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isOrderDropdownOpen, setIsOrderDropdownOpen] = useState(false);
+
+  const handleDropdownToggle = (dropdown) => {
+    if (dropdown === "menu") {
+      setIsDropdownOpen(!isDropdownOpen);
+    } else if (dropdown === "order") {
+      setIsOrderDropdownOpen(!isOrderDropdownOpen);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -55,16 +64,27 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
+              {[ 
                 {
                   icon: ClipboardList,
                   title: "Menu Management",
                   description: "Easily update and organize your menu items",
+                  dropdownLinks: [
+                    { to: "/Snacks", text: "Add Snack" },
+                    { to: "/Inventory", text: "Check Inventory" },
+                  ],
+                  onHover: () => handleDropdownToggle("menu"),
+                  onLeave: () => handleDropdownToggle("menu"),
                 },
                 {
                   icon: ShoppingCart,
                   title: "Order Processing",
                   description: "Efficiently handle and track customer orders",
+                  dropdownLinks: [
+                    {  to: "/CompletedOrders", text: "Track Completed Orders" },
+                  ],
+                  onHover: () => handleDropdownToggle("order"),
+                  onLeave: () => handleDropdownToggle("order"),
                 },
                 {
                   icon: DollarSign,
@@ -73,48 +93,34 @@ export default function Home() {
                 },
               ].map((feature, index) => (
                 <div key={index} className="text-center relative">
-                  {feature.title === "Menu Management" ? (
-                    <div
-                      onMouseEnter={() => setIsDropdownOpen(true)}
-                      onMouseLeave={() => setIsDropdownOpen(false)}
-                      className="relative inline-block"
-                    >
-                      <feature.icon size={48} className="mx-auto mb-4 text-green-600" />
-                      <h3 className="text-xl font-semibold mb-2 cursor-pointer">
-                        {feature.title}
-                      </h3>
-                      <p className="text-gray-600">{feature.description}</p>
+                  <div
+                    onMouseEnter={feature.onHover}
+                    onMouseLeave={feature.onLeave}
+                    className="relative inline-block"
+                  >
+                    <feature.icon size={48} className="mx-auto mb-4 text-green-600" />
+                    <h3 className="text-xl font-semibold mb-2 cursor-pointer">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600">{feature.description}</p>
 
-                      {isDropdownOpen && (
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-40 bg-white shadow-lg rounded-md z-10">
-                          <ul className="py-2">
-                            <li>
+                    {(feature.title === "Menu Management" && isDropdownOpen) || (feature.title === "Order Processing" && isOrderDropdownOpen) ? (
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-40 bg-white shadow-lg rounded-md z-10 opacity-100 transition-all duration-300 ease-in-out">
+                        <ul className="py-2">
+                          {feature.dropdownLinks.map((link, i) => (
+                            <li key={i}>
                               <Link
-                                to="/Snacks"
+                                to={link.to}
                                 className="block px-4 py-2 text-gray-700 hover:bg-green-100"
                               >
-                                Add Snack
+                                {link.text}
                               </Link>
                             </li>
-                            <li>
-                              <Link
-                                to="/Inventory"
-                                className="block px-4 py-2 text-gray-700 hover:bg-green-100"
-                              >
-                                Check Inventory
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <>
-                      <feature.icon size={48} className="mx-auto mb-4 text-green-600" />
-                      <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                      <p className="text-gray-600">{feature.description}</p>
-                    </>
-                  )}
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               ))}
             </div>
@@ -125,7 +131,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Canteen Stats</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {[
+              {[ 
                 { icon: Utensils, value: "1000+", label: "Daily Meals Served" },
                 { icon: Users, value: "500+", label: "Happy Customers" },
                 { icon: ShoppingCart, value: "50+", label: "Menu Items" },
