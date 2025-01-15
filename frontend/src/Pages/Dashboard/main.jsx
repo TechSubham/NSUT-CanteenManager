@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Chart, registerables } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { cn } from "@/lib/utils";
+import Navbar from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
 
 Chart.register(...registerables);
 
 const CanteenDashboard = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
   const [currentChart, setCurrentChart] = useState("beverages");
 
   const beveragesData = [
@@ -68,7 +73,9 @@ const CanteenDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 mt-16">
+    <div>
+      <Navbar/>
+    <div className="min-h-screen bg-gray-100 mt-20">
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold text-emerald-500 mb-6 text-center">
           Canteen Dashboard
@@ -198,6 +205,8 @@ const CanteenDashboard = () => {
 </div>
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 };

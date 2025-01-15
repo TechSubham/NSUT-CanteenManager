@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -32,6 +32,8 @@ import {
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 import { Search, RefreshCcw, CheckCircle2, XCircle } from 'lucide-react';
+import Navbar from '@/components/ui/Navbar';
+import Footer from '@/components/ui/Footer';
 
 const OrdersManagementTable = () => {
   const [initialOrders] = useState([
@@ -213,7 +215,9 @@ const OrdersManagementTable = () => {
   const handlePreviousPage = () => {
     setCurrentPage(prev => Math.max(prev - 1, 1));
   };
-
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
   // Reset to first page when filters change
   React.useEffect(() => {
     setCurrentPage(1);
@@ -221,6 +225,7 @@ const OrdersManagementTable = () => {
 
   return (
     <>
+      <Navbar/>
       <Card className="w-full mt-20">
         <CardContent className="p-6">
           {/* Header section */}
@@ -395,6 +400,7 @@ const OrdersManagementTable = () => {
           </AlertDialogHeader>
         </AlertDialogContent>
       </AlertDialog>
+      <Footer/>
     </>
   );
 };

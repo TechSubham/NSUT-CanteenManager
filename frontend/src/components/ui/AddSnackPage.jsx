@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useFood } from "@/contexts/BackendContext/FoodContext";
 import toast from "react-hot-toast";
+import Navbar from "./Navbar";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,6 +14,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
 
 export default function AddSnackPage() {
   const navigate=useNavigate();
@@ -65,9 +67,14 @@ export default function AddSnackPage() {
       setImage(null);
     }
   }, [isSubmitSuccessful, reset]);
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
+      <Navbar/>
+    <div className="container mx-auto px-4 mt-20 py-8">
       {showDialog && (
         <AlertDialog>
           <AlertDialogContent>
@@ -225,6 +232,8 @@ export default function AddSnackPage() {
           </button>
         </div>
       </form>
+    </div>
+    <Footer/>
     </div>
   );
 }

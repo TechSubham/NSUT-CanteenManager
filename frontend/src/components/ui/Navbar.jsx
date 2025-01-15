@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Chef from "../../assets/Chief.jpg";
 
 const NavbarLinks = [
+  { title: "Home", path: "/HomePage" },
   { title: "Dashboard", path: "/dashboard" },
   { title: "Menu", path: "/menu" },
   { title: "Orders", path: "/orders" },

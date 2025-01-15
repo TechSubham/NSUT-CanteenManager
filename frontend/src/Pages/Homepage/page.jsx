@@ -1,74 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { ClipboardList, IndianRupee, ShoppingCart, Users, Utensils, ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from '@/components/ui/Navbar';
-
+import { Button } from '@/components/ui/button';
+// Checking for commit 
 const GradientCard = ({ children }) => (
   <div className="bg-gradient-to-br from-emerald-50 to-green-100 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
     {children}
   </div>
 );
 
-const NavItem = ({ text, dropdownLinks }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="relative group">
-      <button
-        className="flex items-center space-x-1 text-emerald-800 hover:text-emerald-600 transition-colors"
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
-      >
-        <span>{text}</span>
-        {dropdownLinks && <ChevronDown size={16} />}
-      </button>
-      
-      {dropdownLinks && isOpen && (
-        <div 
-          className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-50"
-          onMouseEnter={() => setIsOpen(true)}
-          onMouseLeave={() => setIsOpen(false)}
-        >
-          {dropdownLinks.map((link, index) => (
-            <Link
-              key={index}
-              to={link.to}
-              className="block px-4 py-2 text-emerald-700 hover:bg-emerald-50 transition-colors"
-            >
-              {link.text}
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
 export default function Home() {
-  const navItems = [
-    { text: 'Dashboard' },
-    { 
-      text: 'Menu',
-      dropdownLinks: [
-        { to: "/Snacks", text: "Add Snack" },
-        { to: "/Inventory", text: "Check Inventory" },
-      ]
-    },
-    { 
-      text: 'Orders',
-      dropdownLinks: [
-        { to: "/orders", text: "Track Completed Orders" },
-        { to: "/PendingOrders", text: "View Pending Orders" },
-      ]
-    },
-    { text: 'Reports' }
-  ];
-
+  const navigate=useNavigate();
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-emerald-50">
       <Navbar/>
 
-      <section className="pt-32 pb-20">
+      <section className="pt-28 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-6xl font-bold bg-gradient-to-r from-emerald-600 to-green-500 bg-clip-text text-transparent mb-6">
@@ -77,14 +28,16 @@ export default function Home() {
             <p className="text-xl text-emerald-700 mb-10">
               Revolutionize your canteen operations with our intelligent management system
             </p>
-            <button className="bg-gradient-to-r from-emerald-500 to-green-400 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-300">
-              Get Started
+            <button
+            onClick={()=>navigate('/Inventory')}
+             className="bg-gradient-to-r from-emerald-500 to-green-400 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-300">
+              Check Inventory
             </button>
           </div>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="pt-12 py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-emerald-900 mb-16">
             Powerful Features
@@ -96,7 +49,7 @@ export default function Home() {
                 title: "Smart Menu Control",
                 description: "AI-powered menu optimization and real-time inventory tracking",
                 links: [
-                  { to: "/Snacks", text: "Add Snack" },
+                  { to: "/Snacks", text: "Add Item in Menu" },
                   { to: "/Inventory", text: "Check Inventory" },
                 ]
               },
@@ -131,13 +84,14 @@ export default function Home() {
                 {feature.links && (
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                     {feature.links.map((link, i) => (
-                      <Link
+                      <button
                         key={i}
+                        onClick={()=>navigate(`${link.to}`)}
                         to={link.to}
-                        className="block px-4 py-2 text-emerald-700 hover:bg-emerald-50 transition-colors"
+                        className="block w-full px-4 py-2 text-emerald-700 hover:bg-emerald-50 transition-colors"
                       >
                         {link.text}
-                      </Link>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -168,7 +122,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer-iska ek component hi shi rhega */}
       <footer className="bg-emerald-900 text-emerald-100 py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">

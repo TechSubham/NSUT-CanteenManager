@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import ReceiptPopup from "./ReceiptPopup"; 
 import Navbar from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
 
 const CompletedOrders = () => {
   const [filter, setFilter] = useState("last-week");
   const [selectedOrder, setSelectedOrder] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
-
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
   const orders = [
-    { orderNumber: "001", date: "2024-12-01", total: "$25", customerName: "Arvind Kejriwal", items: [{ name: "Liquor", price: "$20" }, { name: "Aalo bhujiya", price: "$5" }] },
+    { orderNumber: "001", date: "2025-12-01", total: "$25", customerName: "Arvind Kejriwal", items: [{ name: "Liquor", price: "$20" }, { name: "Aalo bhujiya", price: "$5" }] },
     { orderNumber: "002", date: "2025-12-05", total: "$25", customerName: "Jonathan Jaat", items: [{ name: "Burger", price: "$15" }, { name: "Fries", price: "$5" }, { name: "Soda", price: "$5" }] },
     { orderNumber: "003", date: "2024-12-10", total: "$3", customerName: "Narendra Modi", items: [{ name: "Tea", price: "$1" }, { name: "Water", price: "$2" }] },
+    { orderNumber: "003", date: "2025-12-10", total: "$3", customerName: "Narendra Modi", items: [{ name: "Tea", price: "$1" }, { name: "Water", price: "$2" }] },
+    { orderNumber: "003", date: "2024-12-10", total: "$3", customerName: "Narendra Modi", items: [{ name: "Tea", price: "$1" }, { name: "Water", price: "$2" }] },
+
   ];
 
   const handleFilterChange = (event) => {
@@ -46,7 +52,7 @@ const CompletedOrders = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-fit bg-gray-100">
       {/* <header className="bg-emerald-600 text-white">
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
           <div className="flex items-center space-x-2">
@@ -69,7 +75,7 @@ const CompletedOrders = () => {
       </header> */}
       <Navbar/>
 
-      <main className="flex-grow">
+      <main className="flex-grow mt-20">
         <section className="container mx-auto px-4 py-6">
           <h1 className="text-3xl font-bold text-center mb-8">Completed Orders</h1>
 
@@ -126,6 +132,7 @@ const CompletedOrders = () => {
 
         {isModalOpen && <ReceiptPopup order={selectedOrder} closeModal={closeModal} />}
       </main>
+      <Footer/>
     </div>
   );
 };

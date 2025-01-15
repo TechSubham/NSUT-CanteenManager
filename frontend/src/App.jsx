@@ -10,7 +10,7 @@ import HomePage from "./Pages/HomePage/page";
 import PrivateRoute from "./contexts/authContext/PrivateRoute";
 import Dashboard from './Pages/Dashboard/main'
 import AddSnackPage from "./components/ui/AddSnackPage";
-import InventoryPage from "./components/ui/InventoryPage";
+import InventoryPage from "./Admin/Inventory/InventoryPage";
 import { InventoryProvider } from "./contexts/authContext/InventoryContext";
 import Navbar from "./components/ui/Navbar";
 import CompletedOrders from "./Admin/Orders/CompletedOrders";
@@ -22,7 +22,7 @@ const App = () => {
     <Router>
       <AuthProvider>
         <FoodProvider>
-          <Navbar/>
+          {/* <Navbar/> */}
         <InventoryProvider>
           <Routes >
             {/* Route for Login */}
