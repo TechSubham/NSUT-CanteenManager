@@ -11,7 +11,7 @@ import PrivateRoute from "./contexts/authContext/PrivateRoute";
 import Beverage from "./Admin/Beverage/page";
 import Meal from "./Admin/Meals/page";
 import Snack from "./Admin/Snacks/page"; 
-import Dashboard from './Pages/Dashboard/main';
+import Dashboard from './Pages/Dashboard/main'
 import BeverageTable from "./Admin/Table/beveragetable";
 import SnackTable from "./Admin/Table/Snackstable";
 import MealTable from "./Admin/Table/mealtable";
@@ -19,20 +19,18 @@ import AddSnackPage from "./components/ui/AddSnackPage";
 import InventoryPage from "./components/ui/InventoryPage";
 import { InventoryProvider } from "./contexts/authContext/InventoryContext";
 import Navbar from "./components/ui/Navbar";
-import CompletedOrders from "./Admin/Orders/CompletedOrders";
-import ReceiptPopup from "./Admin/Orders/ReceiptPopup";
+import OrdersTable from "./Pages/OrderList/page";
 const App = () => {
   return (
     <Router>
       <AuthProvider>
-        <Navbar />
+        {/* <Navbar/> */}
         <InventoryProvider>
-          <Routes>
-
-           
+          <Routes >
+            {/* Route for Login */}
             <Route path="/login" element={<Login />} />
 
-          
+            {/* Protected Routes */}
             <Route
               path="/homepage"
               element={
@@ -58,7 +56,7 @@ const App = () => {
               }
             />
             <Route
-              path="/Snacks"
+              path="/Snacks" 
               element={
                 <PrivateRoute>
                   <AddSnackPage />
@@ -89,6 +87,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+
             <Route
               path="/AddSnack"
               element={
@@ -106,22 +105,6 @@ const App = () => {
               }
             />
             <Route
-              path="/CompletedOrders"
-              element={
-                   <PrivateRoute>
-                   <CompletedOrders />
-                  </PrivateRoute>
-              }
-             />
-             <Route
-              path="/ReceiptPopup"
-              element={
-                <PrivateRoute>
-                  <ReceiptPopup />
-                </PrivateRoute>
-              }
-            />
-            <Route
               path="/dashboard"
               element={
                 <PrivateRoute>
@@ -129,7 +112,15 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            
+            <Route
+              path="/OrderList"
+              element={
+                <PrivateRoute>
+                  <OrdersTable />
+                </PrivateRoute>
+              }
+            />
+
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </InventoryProvider>
