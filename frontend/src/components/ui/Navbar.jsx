@@ -7,6 +7,7 @@ const NavbarLinks = [
   { title: "Dashboard", path: "/dashboard" },
   { title: "Menu", path: "/menu" },
   { title: "Orders", path: "/orders" },
+  { title: "Order History", path: "/orderHistory" },
   { title: "Records", path: "/records" },
 ];
 
@@ -14,7 +15,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-green-600 text-white shadow-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-br from-emerald-500 to-green-400 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <Link to="/" className="flex items-center space-x-4 group">
@@ -64,7 +65,7 @@ const Navbar = () => {
       <div 
         className={`md:hidden transition-all duration-300 ease-in-out ${
           isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        } overflow-hidden bg-green-700`}
+        } overflow-hidden bg-emarald-700`}
       >
         <div className="px-4 py-3 space-y-2">
           {NavbarLinks.map((link) => (

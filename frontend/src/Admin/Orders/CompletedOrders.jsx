@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ReceiptPopup from "./ReceiptPopup"; 
+import Navbar from "@/components/ui/Navbar";
 
 const CompletedOrders = () => {
   const [filter, setFilter] = useState("last-week");
@@ -46,7 +47,7 @@ const CompletedOrders = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-green-600 text-white">
+      {/* <header className="bg-emerald-600 text-white">
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="text-xl font-bold">CanteenPro</span>
@@ -65,7 +66,8 @@ const CompletedOrders = () => {
             </ul>
           </nav>
         </div>
-      </header>
+      </header> */}
+      <Navbar/>
 
       <main className="flex-grow">
         <section className="container mx-auto px-4 py-6">
@@ -73,7 +75,7 @@ const CompletedOrders = () => {
 
           <div className="mb-6 flex justify-between items-center">
             <div>
-              <label className="text-green-600 font-semibold mr-2">Filter by:</label>
+              <label className="text-emerald-600 font-semibold mr-2">Filter by:</label>
               <select
                 className="bg-white text-gray-700 py-2 px-4 rounded-md"
                 value={filter}
@@ -93,7 +95,7 @@ const CompletedOrders = () => {
           </div>
 
           <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-            <thead className="bg-green-600 text-white">
+            <thead className="bg-gradient-to-r from-emerald-600 to-green-500 text-white">
               <tr>
                 <th className="py-3 px-6 text-left">Order Number</th>
                 <th className="py-3 px-6 text-left">Date of Purchase</th>

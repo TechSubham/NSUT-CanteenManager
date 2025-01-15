@@ -8,93 +8,60 @@ import { AuthProvider } from "./contexts/authContext";
 import Login from "./Pages/Login/page";
 import HomePage from "./Pages/HomePage/page";
 import PrivateRoute from "./contexts/authContext/PrivateRoute";
-import Beverage from "./Admin/Beverage/page";
-import Meal from "./Admin/Meals/page";
-import Snack from "./Admin/Snacks/page"; 
 import Dashboard from './Pages/Dashboard/main'
-import BeverageTable from "./Admin/Table/beveragetable";
-import SnackTable from "./Admin/Table/Snackstable";
-import MealTable from "./Admin/Table/mealtable";
 import AddSnackPage from "./components/ui/AddSnackPage";
 import InventoryPage from "./components/ui/InventoryPage";
 import { InventoryProvider } from "./contexts/authContext/InventoryContext";
 import Navbar from "./components/ui/Navbar";
 import CompletedOrders from "./Admin/Orders/CompletedOrders";
-import ReceiptPopup from "./Admin/Orders/ReceiptPopup";
 import { FoodProvider } from "./contexts/BackendContext/FoodContext";
 import OrdersTable from "./Pages/OrderList/page";
+import Menu from './Admin/Menu/index'
 const App = () => {
   return (
     <Router>
       <AuthProvider>
         <FoodProvider>
-        <Navbar />
-        {/* <Navbar/> */}
+          <Navbar/>
         <InventoryProvider>
           <Routes >
             {/* Route for Login */}
             <Route path="/login" element={<Login />} />
 
             {/* Protected Routes */}
-            <Route
-              path="/homepage"
+            <Route path="/homepage"
               element={
                 <PrivateRoute>
                   <HomePage />
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/Beverage"
+            <Route path="/orderHistory"
               element={
                 <PrivateRoute>
-                  <Beverage />
+                  <CompletedOrders />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/menu"
+              element={
+                <PrivateRoute>
+                  <Menu />
                 </PrivateRoute>
               }
             />
             <Route
-              path="/Meals"
+              path="/orders"
               element={
                 <PrivateRoute>
-                  <Meal />
+                  <OrdersTable />
                 </PrivateRoute>
               }
             />
+           
+            
             <Route
               path="/Snacks" 
-              element={
-                <PrivateRoute>
-                  <AddSnackPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/BeverageTable"
-              element={
-                <PrivateRoute>
-                  <BeverageTable />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/Snackstable"
-              element={
-                <PrivateRoute>
-                  <SnackTable />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/mealtable"
-              element={
-                <PrivateRoute>
-                  <MealTable />
-                </PrivateRoute>
-              }
-            />
-
-            <Route
-              path="/AddSnack"
               element={
                 <PrivateRoute>
                   <AddSnackPage />
@@ -117,14 +84,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/OrderList"
-              element={
-                <PrivateRoute>
-                  <OrdersTable />
-                </PrivateRoute>
-              }
-            />
+           
 
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>

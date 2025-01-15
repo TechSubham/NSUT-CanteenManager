@@ -70,7 +70,7 @@ const CanteenDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 mt-16">
       <div className="container mx-auto p-6">
-        <h1 className="text-3xl font-bold text-green-700 mb-6 text-center">
+        <h1 className="text-3xl font-bold text-emerald-500 mb-6 text-center">
           Canteen Dashboard
         </h1>
 
@@ -82,8 +82,8 @@ const CanteenDashboard = () => {
               className={cn(
                 "rounded-md px-5 py-2 text-lg font-semibold transition-all duration-200 shadow-md w-full sm:w-auto",
                 currentChart === type
-                  ? "bg-green-700 text-white"
-                  : "bg-white text-green-700 border border-green-700 hover:bg-green-600 hover:text-white"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-white text-emerald-500 border border-emerald-500 hover:bg-emerald-600 hover:text-white"
               )}
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -93,7 +93,7 @@ const CanteenDashboard = () => {
 
         <div className="flex flex-wrap gap-8 justify-center">
           <div className="w-full md:w-1/2 lg:w-1/3">
-            <h2 className="text-xl font-bold text-green-600 mb-4 text-center">
+            <h2 className="text-xl font-bold text-emerald-600 mb-4 text-center">
               Items Sold
             </h2>
             <p className="text-center text-gray-700 mb-4">
@@ -105,7 +105,7 @@ const CanteenDashboard = () => {
           </div>
 
           <div className="w-full md:w-1/2 lg:w-1/3">
-            <h2 className="text-xl font-bold text-green-600 mb-4 text-center">
+            <h2 className="text-xl font-bold text-emerald-600 mb-4 text-center">
               Profits Generated
             </h2>
             <p className="text-center text-gray-700 mb-4">
@@ -120,12 +120,12 @@ const CanteenDashboard = () => {
         <div className="mt-8">
         
           <div>
-            <h2 className="text-2xl font-semibold text-green-700 mb-6 text-center">
+            <h2 className="text-2xl font-semibold text-emerald-500 mb-6 text-center">
               {currentChart.charAt(0).toUpperCase() + currentChart.slice(1)} Details
             </h2>
             <div className="overflow-hidden rounded-xl shadow-lg">
               <table className="min-w-full divide-y divide-gray-200 bg-white text-left">
-                <thead className="bg-gradient-to-r from-green-600 to-green-700 text-white">
+                <thead className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white">
                   <tr>
                     <th
                       scope="col"
