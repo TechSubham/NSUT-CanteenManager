@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Chart, registerables } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import { cn } from "@/lib/utils";
 
 Chart.register(...registerables);
 
 const CanteenDashboard = () => {
   const [currentChart, setCurrentChart] = useState("beverages");
 
-  // Test data arrays - ye abhi ke liye gpt generated hai 
-  // baad mai aise mai database fetchable bhi bana dunga 
   const beveragesData = [
     { item: "Coca Cola", quantity: 40, price: 50 },
     { item: "Pepsi", quantity: 30, price: 45 },
@@ -76,21 +75,21 @@ const CanteenDashboard = () => {
         </h1>
 
         <div className="flex flex-wrap justify-center gap-4 mb-8">
-  {["beverages", "meals", "snacks"].map((type) => (
-    <button
-      key={type}
-      onClick={() => setCurrentChart(type)}
-      className={`rounded-md px-5 py-2 text-lg font-semibold transition-all duration-200 shadow-md ${
-        currentChart === type
-          ? "bg-green-700 text-white"
-          : "bg-white text-green-700 border border-green-700 hover:bg-green-600 hover:text-white"
-      } w-full sm:w-auto`} 
-    >
-      {type.charAt(0).toUpperCase() + type.slice(1)}
-    </button>
-  ))}
-</div>
-
+          {["beverages", "meals", "snacks"].map((type) => (
+            <button
+              key={type}
+              onClick={() => setCurrentChart(type)}
+              className={cn(
+                "rounded-md px-5 py-2 text-lg font-semibold transition-all duration-200 shadow-md w-full sm:w-auto",
+                currentChart === type
+                  ? "bg-green-700 text-white"
+                  : "bg-white text-green-700 border border-green-700 hover:bg-green-600 hover:text-white"
+              )}
+            >
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </button>
+          ))}
+        </div>
 
         <div className="flex flex-wrap gap-8 justify-center">
           <div className="w-full md:w-1/2 lg:w-1/3">
@@ -119,40 +118,84 @@ const CanteenDashboard = () => {
         </div>
 
         <div className="mt-8">
-          <h2 className="text-2xl font-bold text-green-700 mb-4 text-center">
-            {currentChart.charAt(0).toUpperCase() + currentChart.slice(1)} Details
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-green-700 text-white">
-                  <th className="border border-gray-300 px-4 py-2">Item</th>
-                  <th className="border border-gray-300 px-4 py-2">Quantity</th>
-                  <th className="border border-gray-300 px-4 py-2">Price</th>
-                  <th className="border border-gray-300 px-4 py-2">Profit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {chartData.map((item, index) => (
-                  <tr
-                    key={index}
-                    className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
-                  >
-                    <td className="border border-gray-300 px-4 py-2">{item.item}</td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {item.quantity}
+        
+          <div>
+            <h2 className="text-2xl font-semibold text-green-700 mb-6 text-center">
+              {currentChart.charAt(0).toUpperCase() + currentChart.slice(1)} Details
+            </h2>
+            <div className="overflow-hidden rounded-xl shadow-lg">
+              <table className="min-w-full divide-y divide-gray-200 bg-white text-left">
+                <thead className="bg-gradient-to-r from-green-600 to-green-700 text-white">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-4 py-4 text-sm font-bold tracking-wide uppercase"
+                    >
+                      Item
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-4 text-sm font-bold tracking-wide uppercase"
+                    >
+                      Quantity
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-4 text-sm font-bold tracking-wide uppercase"
+                    >
+                      Price
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-4 text-sm font-bold tracking-wide uppercase"
+                    >
+                      Profit
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {chartData.map((item, index) => (
+                    <tr
+                      key={index}
+                      className={cn(
+                        "transition-all duration-200 hover:bg-gray-100 hover:shadow-inner",
+                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      )}
+                    >
+                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                        {item.item}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                        {item.quantity}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                        ₹{item.price}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                        ₹{item.quantity * item.price}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className="bg-gray-100">
+                  <tr>
+                    <td className="px-6 py-4 text-sm font-bold text-gray-700">
+                      Total
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      ₹{item.price}
+                    <td className="px-6 py-4 text-sm font-bold text-gray-700">
+                      {totalItemsSold}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      ₹{item.quantity * item.price}
+                    <td className="px-6 py-4 text-sm font-bold text-gray-700">
+                      -
+                    </td>
+                    <td className="px-6 py-4 text-sm font-bold text-gray-700">
+                      ₹{totalProfitGenerated}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </tfoot>
+              </table>
+            </div>
+</div>
         </div>
       </div>
     </div>

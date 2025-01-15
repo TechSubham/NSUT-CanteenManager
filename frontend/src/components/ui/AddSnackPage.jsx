@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useInventory } from "../../contexts/authContext/InventoryContext";
 import { useForm } from "react-hook-form";
+import { useFood } from "@/contexts/BackendContext/FoodContext";
 
 export default function AddSnackPage() {
+  const {beverages,loading,addBeverage,addMeal,addSnack,error}=useFood();
   const [image, setImage] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const category = ["Beverages", "Meals", "Snacks"];
-  const { addSnack } = useInventory();
 
   const {
     register,
@@ -24,7 +25,19 @@ export default function AddSnackPage() {
       ...data,
       image,
     };
-
+    console.log(newSnack);
+    if(newSnack.category==="Beverages"){
+      const response=addBeverage(...data,image);
+      console.log("Adding Beverage",response);
+    }
+    if(newSnack.category==="Meals"){
+      const response=addBeverage(...data,image);
+      console.log("Adding meals",response);
+    }
+    if(newSnack.category==="Snacks"){
+      const response=addBeverage(...data,image);
+      console.log("",response);
+    }
     addSnack(newSnack);
     setShowPopup(true);
     setTimeout(() => {
