@@ -12,11 +12,13 @@ import Dashboard from './Pages/Dashboard/main'
 import AddSnackPage from "./components/ui/AddSnackPage";
 import InventoryPage from "./Admin/Inventory/InventoryPage";
 import { InventoryProvider } from "./contexts/authContext/InventoryContext";
-import Navbar from "./components/ui/Navbar";
 import CompletedOrders from "./Admin/Orders/CompletedOrders";
 import { FoodProvider } from "./contexts/BackendContext/FoodContext";
 import OrdersTable from "./Pages/OrderList/page";
 import Menu from './Admin/Menu/index'
+import Records from "./Admin/Records/main";
+import Navbar from "./components/ui/Navbar";
+import Footer from "./components/ui/Footer";
 const App = () => {
   return (
     <Router>
@@ -84,7 +86,18 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-           
+            <Route
+            path="/records"
+            element={
+              <PrivateRoute>
+                <Navbar/>
+                <div className="mt-20">
+                <Records/>
+                </div>
+                <Footer/>
+              </PrivateRoute>
+            }
+            />
 
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
