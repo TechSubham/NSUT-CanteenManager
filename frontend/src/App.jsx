@@ -63,7 +63,7 @@ const App = () => {
            
             
             <Route
-              path="/Snacks" 
+              path="/add" 
               element={
                 <PrivateRoute>
                   <AddSnackPage />

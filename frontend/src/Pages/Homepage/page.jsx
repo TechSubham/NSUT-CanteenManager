@@ -29,11 +29,18 @@ export default function Home() {
             <p className="text-xl text-emerald-700 mb-10">
               Revolutionize your canteen operations with our intelligent management system
             </p>
+            <div className='gap-x-6 flex flex-row justify-center'>
             <button
             onClick={()=>navigate('/Inventory')}
              className="bg-gradient-to-r from-emerald-500 to-green-400 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-300">
               Check Inventory
             </button>
+            <button
+            onClick={()=>navigate('/add')}
+             className="bg-gradient-to-r to-emerald-500 from-green-400 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-300">
+              Add Menu Item
+            </button>
+            </div>
           </div>
         </div>
       </section>
@@ -49,18 +56,16 @@ export default function Home() {
                 icon: ClipboardList,
                 title: "Smart Menu Control",
                 description: "AI-powered menu optimization and real-time inventory tracking",
-                links: [
-                  { to: "/Snacks", text: "Add Item in Menu" },
-                  { to: "/Inventory", text: "Check Inventory" },
-                ]
+                // links: [
+                //   { to: "/Snacks", text: "Add Item in Menu" },
+                //   // { to: "/Inventory", text: "Check Inventory" },
+                // ]
               },
               {
                 icon: ShoppingCart,
                 title: "Seamless Orders",
                 description: "Lightning-fast order processing with instant notifications",
-                links: [
-                  { to: "/orders", text: "Track Orders" },
-                ]
+                
               },
               {
                 icon: IndianRupee,
