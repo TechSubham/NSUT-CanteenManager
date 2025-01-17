@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 require('dotenv').config();
 
+// dot env file is containing the api keys
 const serviceAccount = {
     type: process.env.FIREBASE_TYPE,
     project_id: process.env.FIREBASE_PROJECT_ID,
