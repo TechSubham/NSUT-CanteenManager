@@ -41,26 +41,26 @@ export function FoodProvider({ children }) {
 
   const addBeverage = async (newBeverage) => {
     try {
-      const response = await fetch('http://localhost:8080/beverages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newBeverage),
-      });
-      console.log("Response in api is ",response);
+        const response = await fetch('http://localhost:8080/beverages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newBeverage),
+        });
 
-      if (response.ok) {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const addedBeverage = await response.json();
         setBeverages((prevBeverages) => [...prevBeverages, addedBeverage]);
-      } else {
-        setError('Failed to add beverage');
-      }
+        return response; // Return the response object for status checking
     } catch (err) {
-      console.error('Error adding beverage:', err);
-      setError('Failed to add beverage');
+        console.error('Error adding beverage:', err);
+        throw err; // Propagate the error to be handled by the component
     }
-  };
+};
 
   const addMeal = async (newMeal) => {
     try {
@@ -72,17 +72,18 @@ export function FoodProvider({ children }) {
         body: JSON.stringify(newMeal),
       });
 
-      if (response.ok) {
-        const addedMeal = await response.json();
-        setMeals((prevMeals) => [...prevMeals, addedMeal]);
-      } else {
-        setError('Failed to add meal');
-      }
-    } catch (err) {
-      console.error('Error adding meal:', err);
-      setError('Failed to add meal');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
     }
-  };
+
+    const addedmeals = await response.json();
+    setBeverages((prevMeals) => [...prevMeals, addedmeals]);
+    return response; 
+} catch (err) {
+    console.error('Error adding Meal:', err);
+    throw err; 
+}
+}
 
   const addSnack = async (newSnack) => {
     try {
@@ -94,16 +95,17 @@ export function FoodProvider({ children }) {
         body: JSON.stringify(newSnack),
       });
 
-      if (response.ok) {
-        const addedSnack = await response.json();
-        setSnacks((prevSnacks) => [...prevSnacks, addedSnack]);
-      } else {
-        setError('Failed to add snack');
-      }
-    } catch (err) {
-      console.error('Error adding snack:', err);
-      setError('Failed to add snack');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    const addedsnacks = await response.json();
+    setBeverages((prevSnacks) => [...prevSnacks, addedsnacks]);
+    return response; 
+} catch (err) {
+    console.error('Error adding Snacks:', err);
+    throw err; 
+}
   };
 
   const deleteBeverage = async (id) => {

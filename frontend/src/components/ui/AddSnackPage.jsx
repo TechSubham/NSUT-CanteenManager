@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import Navbar from "./Navbar";
 import {
   AlertDialog,
-  AlertDialogAction,
+  
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -20,7 +20,7 @@ export default function AddSnackPage() {
   const navigate=useNavigate();
   const { addBeverage, addMeal, addSnack } = useFood();
   const [image, setImage] = useState(null);
-  const [showDialog, setShowDialog] = useState(false); // Controls the alert dialog
+  const [showDialog, setShowDialog] = useState(false);
   const category = ["Beverages", "Meals", "Snacks"];
 
   const {
@@ -35,31 +35,39 @@ export default function AddSnackPage() {
   };
 
   const onSubmit = async (data) => {
-    const newSnack = { ...data, image };
+    const newItem = {
+        snackName: data.snackName,
+        quantity: parseInt(data.quantity),
+        wholesalePrice: parseFloat(data.wholesalePrice),
+        sellPrice: parseFloat(data.sellPrice),
+        image: image, 
+        availability: true
+    };
+
     toast.loading("Adding item...");
     try {
-      let response;
-      if (newSnack.category === "Beverages") {
-        response = await addBeverage(newSnack);
-      } else if (newSnack.category === "Meals") {
-        response = await addMeal(newSnack);
-      } else if (newSnack.category === "Snacks") {
-        response = await addSnack(newSnack);
-      }
-      if(response.status==200 || response.status==201){
-      toast.dismiss();
-      toast.success("Item added successfully!");
-    }
-      console.log("Item added:", response);
+        let response;
+        if (data.category === "Beverages") {
+            response = await addBeverage(newItem);
+        } else if (data.category === "Meals") {
+            response = await addMeal(newItem);
+        } else if (data.category === "Snacks") {
+            response = await addSnack(newItem);
+        }
 
-      setShowDialog(true); 
+        if (response) {  
+            toast.dismiss();
+            toast.success("Item added successfully!");
+            setShowDialog(true);
+        } else {
+            throw new Error("No response received");
+        }
     } catch (err) {
-      toast.dismiss();
-      toast.error("Failed to add the item. Please try again.");
-      console.log("Error is ",error);
-      console.error("Error adding item:", err);
+        toast.dismiss();
+        toast.error("Failed to add the item. Please try again.");
+        console.error("Error adding item:", err);
     }
-  };
+};
 
   useEffect(() => {
     if (isSubmitSuccessful) {

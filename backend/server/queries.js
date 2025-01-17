@@ -2,33 +2,30 @@ const pool = require('./db');
 
 const createBeverage = async (beverageData) => {
     const {
-        name,
-        description,
-        wholesale_price,
-        selling_price,
-        rating,
-        availability,
-        image_url
+        snackName: name,  
+        quantity,
+        wholesalePrice: wholesale_price, 
+        sellPrice: selling_price,
+        image,
+        availability = true 
     } = beverageData;
 
     const query = `
         INSERT INTO beverages (
-            name, description, wholesale_price, selling_price,
-            rating, availability, image_url
+            name, quantity, wholesale_price, selling_price,
+            availability, image_url
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *;
     `;
 
     try {
         const result = await pool.query(query, [
             name,
-            description,
-            wholesale_price,
-            selling_price,
-            rating,
+            quantity,
+            wholesale_price,selling_price,
             availability,
-            image_url
+            image
         ]);
         return result.rows[0];
     } catch (error) {
@@ -36,35 +33,34 @@ const createBeverage = async (beverageData) => {
         throw error;
     }
 };
+
+
 const createMeal = async (mealsData) => {
     const {
-        name,
-        description,
-        wholesale_price,
-        selling_price,
-        rating,
-        availability,
-        image_url
+        snackName: name,  
+        quantity,
+        wholesalePrice: wholesale_price, 
+        sellPrice: selling_price, 
+        image,
+        availability = true 
     } = mealsData;
 
     const query = `
         INSERT INTO meals (
-            name, description, wholesale_price, selling_price,
-            rating, availability, image_url
+            name,quantity,  wholesale_price, selling_price,
+ availability, image_url
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *;
     `;
 
     try {
         const result = await pool.query(query, [
             name,
-            description,
-            wholesale_price,
-            selling_price,
-            rating,
+            quantity,
+            wholesale_price,selling_price,
             availability,
-            image_url
+            image
         ]);
         return result.rows[0];
     } catch (error) {
@@ -74,33 +70,30 @@ const createMeal = async (mealsData) => {
 };
 const createSnacks = async (snacksData) => {
     const {
-        name,
-        description,
-        wholesale_price,
-        selling_price,
-        rating,
-        availability,
-        image_url
+        snackName: name,  
+        quantity,
+        wholesalePrice: wholesale_price,
+        sellPrice: selling_price,
+        image,
+        availability = true
     } = snacksData;
 
     const query = `
         INSERT INTO snacks (
-            name, description, wholesale_price, selling_price,
-            rating, availability, image_url
+            name,quantity, wholesale_price, selling_price,
+      availability, image_url
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *;
     `;
 
     try {
         const result = await pool.query(query, [
             name,
-            description,
-            wholesale_price,
-            selling_price,
-            rating,
+            quantity,
+            wholesale_price,selling_price,
             availability,
-            image_url
+            image
         ]);
         return result.rows[0];
     } catch (error) {
@@ -111,7 +104,7 @@ const createSnacks = async (snacksData) => {
 
 const getAllBeverages = async () => {
     const query = 'SELECT * FROM beverages ORDER BY created_at DESC';
-    
+
     try {
         const result = await pool.query(query);
         return result.rows;
@@ -122,7 +115,7 @@ const getAllBeverages = async () => {
 };
 const getAllMeals = async () => {
     const query = 'SELECT * FROM meals ORDER BY created_at DESC';
-    
+
     try {
         const result = await pool.query(query);
         return result.rows;
@@ -133,7 +126,7 @@ const getAllMeals = async () => {
 };
 const getAllSnacks = async () => {
     const query = 'SELECT * FROM snacks ORDER BY created_at DESC';
-    
+
     try {
         const result = await pool.query(query);
         return result.rows;
@@ -145,7 +138,7 @@ const getAllSnacks = async () => {
 
 const getBeverageById = async (id) => {
     const query = 'SELECT * FROM beverages WHERE id = $1';
-    
+
     try {
         const result = await pool.query(query, [id]);
         return result.rows[0];
@@ -156,7 +149,7 @@ const getBeverageById = async (id) => {
 };
 const getSnacksById = async (id) => {
     const query = 'SELECT * FROM snacks WHERE id = $1';
-    
+
     try {
         const result = await pool.query(query, [id]);
         return result.rows[0];
@@ -168,7 +161,7 @@ const getSnacksById = async (id) => {
 
 const getMealsById = async (id) => {
     const query = 'SELECT * FROM meals WHERE id = $1';
-    
+
     try {
         const result = await pool.query(query, [id]);
         return result.rows[0];
@@ -180,7 +173,7 @@ const getMealsById = async (id) => {
 
 const deleteBeverageById = async (id) => {
     const query = 'DELETE FROM beverages WHERE id = $1 RETURNING *';
-    
+
     try {
         const result = await pool.query(query, [id]);
         return result.rows[0];
@@ -191,7 +184,7 @@ const deleteBeverageById = async (id) => {
 };
 const deleteMealById = async (id) => {
     const query = 'DELETE FROM meals WHERE id = $1 RETURNING *';
-    
+
     try {
         const result = await pool.query(query, [id]);
         return result.rows[0];
@@ -203,7 +196,7 @@ const deleteMealById = async (id) => {
 
 const deleteSnackById = async (id) => {
     const query = 'DELETE FROM snacks WHERE id = $1 RETURNING *';
-    
+
     try {
         const result = await pool.query(query, [id]);
         return result.rows[0];
