@@ -1,13 +1,15 @@
 const pool = require('./db');
+const { sendNotification } = require('./firebaseAdmin');
+
 
 const createBeverage = async (beverageData) => {
     const {
-        snackName: name,  
+        snackName: name,
         quantity,
-        wholesalePrice: wholesale_price, 
+        wholesalePrice: wholesale_price,
         sellPrice: selling_price,
         image,
-        availability = true 
+        availability = true
     } = beverageData;
 
     const query = `
@@ -23,10 +25,16 @@ const createBeverage = async (beverageData) => {
         const result = await pool.query(query, [
             name,
             quantity,
-            wholesale_price,selling_price,
+            wholesale_price,
+            selling_price,
             availability,
             image
         ]);
+        await sendNotification(
+            'New Beverage Added',
+            `${name} has been added to the beverages menu`
+        );
+
         return result.rows[0];
     } catch (error) {
         console.error('Error creating beverage:', error);
@@ -37,12 +45,12 @@ const createBeverage = async (beverageData) => {
 
 const createMeal = async (mealsData) => {
     const {
-        snackName: name,  
+        snackName: name,
         quantity,
-        wholesalePrice: wholesale_price, 
-        sellPrice: selling_price, 
+        wholesalePrice: wholesale_price,
+        sellPrice: selling_price,
         image,
-        availability = true 
+        availability = true
     } = mealsData;
 
     const query = `
@@ -58,10 +66,15 @@ const createMeal = async (mealsData) => {
         const result = await pool.query(query, [
             name,
             quantity,
-            wholesale_price,selling_price,
+            wholesale_price, selling_price,
             availability,
             image
         ]);
+
+        await sendNotification(
+            'New meal Added',
+            `${name} has been added to the meal menu`
+        );
         return result.rows[0];
     } catch (error) {
         console.error('Error creating meals:', error);
@@ -70,7 +83,7 @@ const createMeal = async (mealsData) => {
 };
 const createSnacks = async (snacksData) => {
     const {
-        snackName: name,  
+        snackName: name,
         quantity,
         wholesalePrice: wholesale_price,
         sellPrice: selling_price,
@@ -91,10 +104,14 @@ const createSnacks = async (snacksData) => {
         const result = await pool.query(query, [
             name,
             quantity,
-            wholesale_price,selling_price,
+            wholesale_price, selling_price,
             availability,
             image
         ]);
+        await sendNotification(
+            'New Snack Added',
+            `${name} has been added to the Snack menu`
+        );
         return result.rows[0];
     } catch (error) {
         console.error('Error creating snacks:', error);
