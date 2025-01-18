@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { subscribeToTopic } = require('./firebaseAdmin');
-const { 
+const {
     createBeverage, deleteBeverageById, deleteSnackById,
     deleteMealById, getAllBeverages, getBeverageById,
     getMealsById, getAllMeals, createMeal,
@@ -17,7 +17,7 @@ app.use(express.json());
 app.post('/subscribe-to-topic', async (req, res) => {
     try {
         const { token } = req.body;
-        
+
         if (!token) {
             return res.status(400).json({ error: 'FCM token is required' });
         }
@@ -139,7 +139,7 @@ app.get('/meals/:id', async (req, res) => {
 app.delete('/beverages/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        
+
         console.log('Received delete request for beverage ID:', id);
 
         if (!id || isNaN(parseInt(id))) {
@@ -147,21 +147,21 @@ app.delete('/beverages/:id', async (req, res) => {
         }
 
         const deletedBeverage = await deleteBeverageById(id);
-        
+
         if (!deletedBeverage) {
             return res.status(404).json({ error: 'Beverage not found' });
         }
 
-        res.json({ 
+        res.json({
             message: 'Beverage deleted successfully',
-            id: deletedBeverage.id 
+            id: deletedBeverage.id
         });
 
     } catch (error) {
         console.error('Server error while deleting beverage:', error);
-        res.status(500).json({ 
-            error: 'Internal server error', 
-            details: error.message 
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
         });
     }
 });
@@ -169,7 +169,7 @@ app.delete('/beverages/:id', async (req, res) => {
 app.delete('/meals/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        
+
         console.log('Received delete request for meal ID:', id);
 
         if (!id || isNaN(parseInt(id))) {
@@ -177,21 +177,21 @@ app.delete('/meals/:id', async (req, res) => {
         }
 
         const deletedMeal = await deleteMealById(id);
-        
+
         if (!deletedMeal) {
             return res.status(404).json({ error: 'Meal not found' });
         }
 
-        res.json({ 
+        res.json({
             message: 'Meal deleted successfully',
-            id: deletedMeal.id 
+            id: deletedMeal.id
         });
 
     } catch (error) {
         console.error('Server error while deleting meal:', error);
-        res.status(500).json({ 
-            error: 'Internal server error', 
-            details: error.message 
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
         });
     }
 });
@@ -199,7 +199,7 @@ app.delete('/meals/:id', async (req, res) => {
 app.delete('/snacks/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        
+
         console.log('Received delete request for snack ID:', id);
 
         if (!id || isNaN(parseInt(id))) {
@@ -207,21 +207,21 @@ app.delete('/snacks/:id', async (req, res) => {
         }
 
         const deletedSnack = await deleteSnackById(id);
-        
+
         if (!deletedSnack) {
             return res.status(404).json({ error: 'Snack not found' });
         }
 
-        res.json({ 
+        res.json({
             message: 'Snack deleted successfully',
-            id: deletedSnack.id 
+            id: deletedSnack.id
         });
 
     } catch (error) {
         console.error('Server error while deleting snack:', error);
-        res.status(500).json({ 
-            error: 'Internal server error', 
-            details: error.message 
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
         });
     }
 });
