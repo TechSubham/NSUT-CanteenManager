@@ -16,15 +16,15 @@ export function FoodProvider({ children }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const beverageResponse = await fetch('http://localhost:8080/beverages');
+        const beverageResponse = await fetch('http://localhost:8080/menu-items?type=Beverages');
         const beverageData = await beverageResponse.json();
         setBeverages(beverageData);
 
-        const snackResponse = await fetch('http://localhost:8080/snacks');
+        const snackResponse = await fetch('http://localhost:8080/menu-items?type=Snacks');
         const snackData = await snackResponse.json();
         setSnacks(snackData);
 
-        const mealResponse = await fetch('http://localhost:8080/meals');
+        const mealResponse = await fetch('http://localhost:8080/menu-items?type=Meals');
         const mealData = await mealResponse.json();
         setMeals(mealData);
 
@@ -37,75 +37,52 @@ export function FoodProvider({ children }) {
     };
 
     fetchData();
-  }, []);
+}, []);
 
-  const addBeverage = async (newBeverage) => {
+  const addItem = async (itemData) => {
     try {
-        const response = await fetch('http://localhost:8080/beverages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newBeverage),
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const addedBeverage = await response.json();
-        setBeverages((prevBeverages) => [...prevBeverages, addedBeverage]);
-        return response; // Return the response object for status checking
-    } catch (err) {
-        console.error('Error adding beverage:', err);
-        throw err; // Propagate the error to be handled by the component
-    }
-};
-
-  const addMeal = async (newMeal) => {
-    try {
-      const response = await fetch('http://localhost:8080/meals', {
+      const formattedData = {
+        snackName: itemData.snackName,
+        quantity: parseInt(itemData.quantity),
+        wholesalePrice: parseFloat(itemData.wholesalePrice),
+        sellPrice: parseFloat(itemData.sellPrice),
+        image: itemData.image,
+        category: itemData.category,
+        availability: true
+      };
+  
+      const response = await fetch('http://localhost:8080/menu-items', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newMeal),
+        body: JSON.stringify(formattedData),
       });
-
+  
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Failed to add ${itemData.category.toLowerCase()}`);
+      }
+  
+      const addedItem = await response.json();
+   
+      switch (itemData.category) {
+        case 'Beverages':
+          setBeverages(prev => [...prev, addedItem]);
+          break;
+        case 'Meals':
+          setMeals(prev => [...prev, addedItem]);
+          break;
+        case 'Snacks':
+          setSnacks(prev => [...prev, addedItem]);
+          break;
+      }
+  
+      return addedItem;
+    } catch (error) {
+      console.error('Error adding item:', error);
+      throw error;
     }
-
-    const addedmeals = await response.json();
-    setBeverages((prevMeals) => [...prevMeals, addedmeals]);
-    return response; 
-} catch (err) {
-    console.error('Error adding Meal:', err);
-    throw err; 
-}
-}
-
-  const addSnack = async (newSnack) => {
-    try {
-      const response = await fetch('http://localhost:8080/snacks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newSnack),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const addedsnacks = await response.json();
-    setBeverages((prevSnacks) => [...prevSnacks, addedsnacks]);
-    return response; 
-} catch (err) {
-    console.error('Error adding Snacks:', err);
-    throw err; 
-}
   };
 
   const deleteBeverage = async (id) => {
@@ -171,12 +148,10 @@ export function FoodProvider({ children }) {
     snacks,
     loading,
     error,
-    addBeverage,
-    addMeal,
-    addSnack,
     deleteBeverage,
     deleteMeal,
     deleteSnack,
+    addItem
   };
 
   return <FoodContext.Provider value={value}>{children}</FoodContext.Provider>;

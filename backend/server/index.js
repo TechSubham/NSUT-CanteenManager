@@ -5,7 +5,10 @@ const {
     createBeverage, deleteBeverageById, deleteSnackById,
     deleteMealById, getAllBeverages, getBeverageById,
     getMealsById, getAllMeals, createMeal,
-    createSnacks, getSnacksById, getAllSnacks
+    createSnacks, getSnacksById, getAllSnacks , createMenuItem,
+    getAllMenuItems,
+    getMenuItemById,
+    deleteMenuItemById
 } = require('./queries');
 
 const app = express();
@@ -225,6 +228,76 @@ app.delete('/snacks/:id', async (req, res) => {
         });
     }
 });
+
+app.post('/menu-items', async (req, res) => {
+    try {
+        const newItem = await createMenuItem(req.body);
+        res.status(201).json(newItem);
+    } catch (error) {
+        console.error('Menu item creation error:', error);
+        res.status(500).json({ 
+            error: 'Internal server error',
+            message: error.message,
+            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
+    }
+});
+
+app.get('/menu-items', async (req, res) => {
+    try {
+        const { type } = req.query;
+        const items = await getAllMenuItems(type);
+        res.json(items);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/menu-items/:id', async (req, res) => {
+    try {
+        const item = await getMenuItemById(req.params.id);
+        if (item) {
+            res.json(item);
+        } else {
+            res.status(404).json({ error: 'Item not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.delete('/menu-items/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        console.log('Received delete request for item ID:', id);
+
+        if (!id || isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid item ID' });
+        }
+
+        const deletedItem = await deleteMenuItemById(id);
+
+        if (!deletedItem) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        res.json({
+            message: 'Item deleted successfully',
+            id: deletedItem.id
+        });
+
+    } catch (error) {
+        console.error('Server error while deleting item:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
+        });
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Backend Server Started on port ${port}`);

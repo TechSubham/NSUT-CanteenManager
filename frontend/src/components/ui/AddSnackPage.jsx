@@ -18,58 +18,63 @@ import Footer from "./Footer";
 import { messaging } from "@/firebase/firebase";
 import { getToken } from "firebase/messaging";
 
+
+
 export default function AddSnackPage() {
-  const navigate = useNavigate();
-  const { addBeverage, addMeal, addSnack } = useFood();
-  const [image, setImage] = useState(null);
-  const [showDialog, setShowDialog] = useState(false);
-  const category = ["Beverages", "Meals", "Snacks"];
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitSuccessful },
-  } = useForm();
-
-  const handleImageUpload = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
-  };
-
-  const onSubmit = async (data) => {
-    const newItem = {
-      snackName: data.snackName,
-      quantity: parseInt(data.quantity),
-      wholesalePrice: parseFloat(data.wholesalePrice),
-      sellPrice: parseFloat(data.sellPrice),
-      image: image,
-      availability: true,
+    const navigate = useNavigate();
+    const { addItem } = useFood();
+    const [image, setImage] = useState(null);
+    const [showDialog, setShowDialog] = useState(false);
+    const category = ["Beverages", "Meals", "Snacks"];
+  
+    const {
+      register,
+      handleSubmit,
+      reset,
+      formState: { errors, isSubmitSuccessful },
+    } = useForm();
+  
+    const handleImageUpload = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
     };
-
-    toast.loading("Adding item...");
-    try {
-      let response;
-      if (data.category === "Beverages") {
-        response = await addBeverage(newItem);
-      } else if (data.category === "Meals") {
-        response = await addMeal(newItem);
-      } else if (data.category === "Snacks") {
-        response = await addSnack(newItem);
+  
+    const onSubmit = async (data) => {
+      if (!image) {
+        toast.error("Please upload an image");
+        return;
       }
-
-      if (response) {
+  
+      const newItem = {
+        snackName: data.snackName,
+        quantity: parseInt(data.quantity),
+        wholesalePrice: parseFloat(data.wholesalePrice),
+        sellPrice: parseFloat(data.sellPrice),
+        image: image,
+        category: data.category,
+        availability: true,
+      };
+  
+      toast.loading("Adding item...");
+      try {
+        const response = await addItem(newItem);
+        if (response) {
+          toast.dismiss();
+          toast.success("Item added successfully!");
+          setShowDialog(true);
+        }
+      } catch (err) {
         toast.dismiss();
-        toast.success("Item added successfully!");
-        setShowDialog(true);
-      } else {
-        throw new Error("No response received");
+        toast.error(err.message || "Failed to add the item. Please try again.");
+        console.error("Error adding item:", err);
       }
-    } catch (err) {
-      toast.dismiss();
-      toast.error("Failed to add the item. Please try again.");
-      console.error("Error adding item:", err);
-    }
-  };
+    };
 
   useEffect(() => {
     if (isSubmitSuccessful) {

@@ -28,10 +28,25 @@ const sendNotification = async (title, body) => {
     try {
         const message = {
             notification: {
-                title,
-                body,
+                title: `🌟 ${title} 🌟`, 
+                body: `📢 ${body}\n\n✨ Thank you for staying updated! ✨`, 
             },
-            topic: 'newItems'
+            topic: 'newItems',
+            android: {
+                notification: {
+                    color: '#4CAF50', 
+                    icon: 'ic_notification', 
+                    sound: 'default', 
+                },
+            },
+            apns: {
+                payload: {
+                    aps: {
+                        sound: 'default',
+                        badge: 1,
+                    },
+                },
+            },
         };
 
         const response = await admin.messaging().send(message);
@@ -42,5 +57,6 @@ const sendNotification = async (title, body) => {
         throw error;
     }
 };
+
 
 module.exports = { sendNotification, subscribeToTopic };

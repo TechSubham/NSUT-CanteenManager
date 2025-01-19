@@ -223,6 +223,91 @@ const deleteSnackById = async (id) => {
     }
 };
 
+const createMenuItem = async (itemData) => {
+    const {
+        snackName: name,
+        quantity,
+        wholesalePrice: wholesale_price,
+        sellPrice: selling_price,
+        image,
+        category,
+        availability = true
+    } = itemData;
+
+    const query = `
+        INSERT INTO menu_items (
+            name, quantity, wholesale_price, selling_price,
+            availability, image_url, item_type
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *;
+    `;
+
+    try {
+        const result = await pool.query(query, [
+            name,
+            quantity,
+            wholesale_price,
+            selling_price,
+            availability,
+            image,
+            category
+        ]);
+
+        if (!result.rows[0]) {
+            throw new Error('Failed to insert item into database');
+        }
+
+        await sendNotification(
+            `New ${category} Added`,
+            `${name} has been added to the menu`
+        );
+
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error creating menu item:', error);
+        throw new Error(`Failed to create menu item: ${error.message}`);
+    }
+};
+
+const getAllMenuItems = async (itemType = null) => {
+    const query = itemType 
+        ? 'SELECT * FROM menu_items WHERE item_type = $1 ORDER BY created_at DESC'
+        : 'SELECT * FROM menu_items ORDER BY created_at DESC';
+
+    try {
+        const result = await pool.query(query, itemType ? [itemType] : []);
+        return result.rows;
+    } catch (error) {
+        console.error('Error fetching menu items:', error);
+        throw error;
+    }
+};
+
+const getMenuItemById = async (id) => {
+    const query = 'SELECT * FROM menu_items WHERE id = $1';
+
+    try {
+        const result = await pool.query(query, [id]);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error fetching menu item:', error);
+        throw error;
+    }
+};
+
+const deleteMenuItemById = async (id) => {
+    const query = 'DELETE FROM menu_items WHERE id = $1 RETURNING *';
+
+    try {
+        const result = await pool.query(query, [id]);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error deleting menu item:', error);
+        throw error;
+    }
+};
+
 module.exports = {
     createBeverage,
     getAllBeverages,
@@ -236,4 +321,8 @@ module.exports = {
     deleteBeverageById,
     deleteSnackById,
     deleteMealById,
+    createMenuItem,
+    getAllMenuItems,
+    getMenuItemById,
+    deleteMenuItemById
 };
