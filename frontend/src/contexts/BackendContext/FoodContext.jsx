@@ -1,158 +1,124 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
+// Create the context
 const FoodContext = createContext();
 
+// Custom hook for consuming the context
 export function useFood() {
   return useContext(FoodContext);
 }
 
+// Provider Component
 export function FoodProvider({ children }) {
-  const [beverages, setBeverages] = useState([]);
-  const [meals, setMeals] = useState([]);
-  const [snacks, setSnacks] = useState([]);
+  const [menuItems, setMenuItems] = useState({
+    beverages: [],
+    meals: [],
+    snacks: [],
+    menu:[],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch all menu items on load
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMenuItems = async () => {
       try {
-        const beverageResponse = await fetch('http://localhost:8080/menu-items?type=Beverages');
-        const beverageData = await beverageResponse.json();
-        setBeverages(beverageData);
+        const menuResponse = await fetch('http://localhost:8080/menu-items');
+        const menu = await menuResponse.json();
+        console.log("Mennu are ",menu);
+        const mealsResponse = await fetch('http://localhost:8080/menu-items?type=Meals');
+        const meals = await mealsResponse.json();
+        console.log("Meals are ",meals)
+        const snacksResponse = await fetch('http://localhost:8080/menu-items?type=Snacks');
+        const snacks = await snacksResponse.json();
+        console.log("Snacks are ",snacks)
+        const beveragesResponse = await fetch('http://localhost:8080/menu-items?type=Beverages');
+        const beverages = await beveragesResponse.json();
 
-        const snackResponse = await fetch('http://localhost:8080/menu-items?type=Snacks');
-        const snackData = await snackResponse.json();
-        setSnacks(snackData);
-
-        const mealResponse = await fetch('http://localhost:8080/menu-items?type=Meals');
-        const mealData = await mealResponse.json();
-        setMeals(mealData);
-
+        setMenuItems({ beverages, meals, snacks,menu});
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load data');
+        console.error('Error fetching menu items:', err);
+        setError('Failed to load menu items');
         setLoading(false);
       }
     };
 
-    fetchData();
-}, []);
+    fetchMenuItems();
+  }, []);
 
-  const addItem = async (itemData) => {
+  // Add a new menu item
+  const addMenuItem = async (itemData) => {
     try {
-      const formattedData = {
-        snackName: itemData.snackName,
-        quantity: parseInt(itemData.quantity),
-        wholesalePrice: parseFloat(itemData.wholesalePrice),
-        sellPrice: parseFloat(itemData.sellPrice),
-        image: itemData.image,
-        category: itemData.category,
-        availability: true
-      };
-  
       const response = await fetch('http://localhost:8080/menu-items', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formattedData),
+        body: JSON.stringify(itemData),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `Failed to add ${itemData.category.toLowerCase()}`);
+        throw new Error(errorData.message || 'Failed to add menu item');
       }
-  
-      const addedItem = await response.json();
-   
-      switch (itemData.category) {
-        case 'Beverages':
-          setBeverages(prev => [...prev, addedItem]);
-          break;
-        case 'Meals':
-          setMeals(prev => [...prev, addedItem]);
-          break;
-        case 'Snacks':
-          setSnacks(prev => [...prev, addedItem]);
-          break;
-      }
-  
-      return addedItem;
-    } catch (error) {
-      console.error('Error adding item:', error);
-      throw error;
+
+      const newItem = await response.json();
+      setMenuItems((prev) => {
+        const updated = { ...prev };
+        updated[itemData.category.toLowerCase()] = [...prev[itemData.category.toLowerCase()], newItem];
+        return updated;
+      });
+    } catch (err) {
+      console.error('Error adding menu item:', err);
+      setError('Failed to add menu item');
     }
   };
 
-  const deleteBeverage = async (id) => {
+  // Delete a menu item by ID
+  const deleteMenuItem = async (id, category) => {
     try {
-      const response = await fetch(`http://localhost:8080/beverages/${id}`, {
+      const response = await fetch(`http://localhost:8080/${category.toLowerCase()}/${id}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
-        setBeverages((prevBeverages) =>
-          prevBeverages.filter((beverage) => beverage.id !== id)
-        );
+        setMenuItems((prev) => {
+          const updated = { ...prev };
+          updated[category.toLowerCase()] = prev[category.toLowerCase()].filter((item) => item.id !== id);
+          return updated;
+        });
       } else {
-        setError('Failed to delete beverage');
+        throw new Error('Failed to delete menu item');
       }
     } catch (err) {
-      console.error('Error deleting beverage:', err);
-      setError('Failed to delete beverage');
+      console.error('Error deleting menu item:', err);
+      setError('Failed to delete menu item');
     }
   };
-
-  const deleteMeal = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:8080/meals/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        setMeals((prevMeals) =>
-          prevMeals.filter((meal) => meal.id !== id)
-        );
-      } else {
-        setError('Failed to delete meal');
+  const editMenuItem=async(id,category)=>{
+    try{
+      const response=await fetch(`http://localhost:8080/${category.toLowerCase()}/${id}`,{
+        method:'UPDATE',
+      })
+      if(response.ok){
+        setMenuItems((prev)=>{
+          const updated={...prev};
+          updated[category.toLowerCase()]=prev[category.toLowerCase()].filter((item)=>item.id!==id);
+        })
       }
-    } catch (err) {
-      console.error('Error deleting meal:', err);
-      setError('Failed to delete meal');
     }
-  };
+    catch(error){
 
-  const deleteSnack = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:8080/snacks/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        setSnacks((prevSnacks) =>
-          prevSnacks.filter((snack) => snack.id !== id)
-        );
-      } else {
-        setError('Failed to delete snack');
-      }
-    } catch (err) {
-      console.error('Error deleting snack:', err);
-      setError('Failed to delete snack');
     }
-  };
-
-  const value = {
-    beverages,
-    meals,
-    snacks,
+  }
+  const contextValue = {
+    menuItems,
     loading,
     error,
-    deleteBeverage,
-    deleteMeal,
-    deleteSnack,
-    addItem
+    addMenuItem,
+    deleteMenuItem,
   };
 
-  return <FoodContext.Provider value={value}>{children}</FoodContext.Provider>;
+  return <FoodContext.Provider value={contextValue}>{children}</FoodContext.Provider>;
 }
