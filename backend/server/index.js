@@ -8,7 +8,9 @@ const {
     createSnacks, getSnacksById, getAllSnacks , createMenuItem,
     getAllMenuItems,
     getMenuItemById,
-    deleteMenuItemById
+    deleteMenuItemById,
+    editMenuItemById,
+    getMenuItemByName
 } = require('./queries');
 
 const app = express();
@@ -294,6 +296,66 @@ app.delete('/menu-items/:id', async (req, res) => {
         res.status(500).json({
             error: 'Internal server error',
             details: error.message
+        });
+    }
+});
+// PUT route for editing a menu item by ID
+app.put('/menu-items/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedData = req.body;
+
+        console.log('Received update request for item ID:', id);
+
+        if (!id || isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid item ID' });
+        }
+
+        const updatedItem = await editMenuItemById(id, updatedData);
+
+        if (!updatedItem) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        res.json({
+            message: 'Item updated successfully',
+            updatedItem,
+        });
+    } catch (error) {
+        console.error('Server error while updating item:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message,
+        });
+    }
+});
+
+// DELETE route for deleting a menu item by ID
+app.delete('/menu-items/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        console.log('Received delete request for item ID:', id);
+
+        if (!id || isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid item ID' });
+        }
+
+        const deletedItem = await deleteMenuItemById(id);
+
+        if (!deletedItem) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        res.json({
+            message: 'Item deleted successfully',
+            id: deletedItem.id,
+        });
+    } catch (error) {
+        console.error('Server error while deleting item:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message,
         });
     }
 });

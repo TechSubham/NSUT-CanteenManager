@@ -1,7 +1,6 @@
 const pool = require('./db');
 const { sendNotification } = require('./firebaseAdmin');
 
-
 const createBeverage = async (beverageData) => {
     const {
         snackName: name,
@@ -295,7 +294,16 @@ const getMenuItemById = async (id) => {
         throw error;
     }
 };
-
+const getMenuItemByName=async(name)=>{
+    const query=`SELECT * FROM menu_items WHERE name=$1`;
+    try{
+        const result=await pool.query(query,[name]);
+        return result.rows[0];
+    }catch(error){
+        console.error('Error fetching menu item: ',error)
+        throw error;
+    }
+}
 const deleteMenuItemById = async (id) => {
     const query = 'DELETE FROM menu_items WHERE id = $1 RETURNING *';
 
@@ -307,7 +315,24 @@ const deleteMenuItemById = async (id) => {
         throw error;
     }
 };
-
+const editMenuItemById = async (id, updates) => {
+    const fields = Object.keys(updates);
+    const values = Object.values(updates);
+    
+    if (fields.length !== 0) {
+        const setClause = fields.map((field, index) => `${field}=$${index + 1}`).join(",");
+        values.push(id);
+        const query = `UPDATE menu_items SET ${setClause} WHERE id=$${fields.length + 1}`;
+        try {
+            const result = await pool.query(query, values);
+            console.log("Menu updated successfully: ", result);
+            return result;
+        } catch (error) {
+            console.error("Error updating menu item: ", error);
+            throw error;
+        }
+    }
+}
 module.exports = {
     createBeverage,
     getAllBeverages,
@@ -324,5 +349,7 @@ module.exports = {
     createMenuItem,
     getAllMenuItems,
     getMenuItemById,
-    deleteMenuItemById
+    deleteMenuItemById,
+    getMenuItemByName,
+    editMenuItemById
 };

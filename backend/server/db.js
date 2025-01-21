@@ -6,6 +6,7 @@ const pool = new Pool({
         rejectUnauthorized: false,
       },
 });
+
 pool.connect((err) => {
     if (err) {
         console.log("Error Connecting to the Database", err);
