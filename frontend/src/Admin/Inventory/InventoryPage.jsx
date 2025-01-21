@@ -1,45 +1,68 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/ui/Navbar';
 import InventoryCard from './InventoryCard';
 import { AlertTriangle } from 'lucide-react';
 import Footer from '@/components/ui/Footer';
+import toast from 'react-hot-toast';
+import { useFood } from "@/contexts/BackendContext/FoodContext";
+
 const initialInventory = [
   { id: 1, name: 'Rice Plate', category: 'Meals', quantity: 2, unit: 'plates', price: 60 },
-  { id: 2, name: 'Dal Fry', category: 'Meals', quantity: 2, unit: 'plates', price: 40 },
-  { id: 3, name: 'Chole Bhature', category: 'Meals', quantity: 4, unit: 'plates', price: 50 },
-  { id: 4, name: 'Veg Thali', category: 'Meals', quantity: 5, unit: 'plates', price: 80 },
-  { id: 5, name: 'Paneer Butter Masala', category: 'Meals', quantity: 3, unit: 'plates', price: 90 },
-  { id: 6, name: 'Samosa', category: 'Snacks', quantity: 30, unit: 'pieces', price: 15 },
-  { id: 7, name: 'Vada Pav', category: 'Snacks', quantity: 4, unit: 'pieces', price: 20 },
-  { id: 8, name: 'Masala Dosa', category: 'Snacks', quantity: 12, unit: 'pieces', price: 40 },
-  { id: 9, name: 'French Fries', category: 'Snacks', quantity: 25, unit: 'plates', price: 50 },
-  { id: 10, name: 'Veg Sandwich', category: 'Snacks', quantity: 18, unit: 'pieces', price: 30 },
-  { id: 11, name: 'Tea', category: 'Beverages', quantity: 40, unit: 'cups', price: 12 },
-  { id: 12, name: 'Coffee', category: 'Beverages', quantity: 2, unit: 'cups', price: 15 },
-  { id: 13, name: 'Cold Coffee', category: 'Beverages', quantity: 8, unit: 'glasses', price: 40 },
-  { id: 14, name: 'Mango Lassi', category: 'Beverages', quantity: 15, unit: 'glasses', price: 35 },
-  { id: 15, name: 'Fresh Lime Soda', category: 'Beverages', quantity: 20, unit: 'glasses', price: 25 },
-  { id: 16, name: 'Masala Chai', category: 'Beverages', quantity: 4, unit: 'cups', price: 15 },
 ];
 
 const InventoryPage = () => {
-  const [inventory, setInventory] = useState(initialInventory);
+  const { menuItems, loading, error } = useFood();
+  const [inventory, setInventory] = useState(menuItems.menu || initialInventory);
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState('');
-  useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []);
-  const lowStockItems = inventory.filter(item => item.quantity < 5);
 
-  const updateQuantity = (id, change) => {
-    setInventory(inventory.map(item => {
-      if (item.id === id) {
-        const newQuantity = item.quantity + change;
-        if (newQuantity < 0) return item;
-        return { ...item, quantity: newQuantity };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (loading) {
+      toast.loading("Loading menu items...");
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (menuItems.menu) {
+      setInventory(menuItems.menu);
+      toast.dismiss(); 
+    }
+  }, [menuItems]);
+
+  const lowStockItems = inventory.filter(item => item.quantity < 10);
+
+  const updateQuantity = async (id, change) => {
+    const itemToUpdate = inventory.find((item) => item.id === id);
+    if (!itemToUpdate) return;
+
+    const newQuantity = Math.max(0, itemToUpdate.quantity + change);
+    try {
+      const response = await fetch(`http://localhost:8080/menu-items/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity: newQuantity }),
+      });
+      
+      const data = await response.json();
+      console.log("Update response:", data);
+      
+      if (response.ok) {
+        setInventory(
+          inventory.map((item) =>
+            item.id === id ? { ...item, quantity: newQuantity } : item
+          )
+        );
+        toast.success("Quantity updated successfully!");
+      } else {
+        throw new Error(data.message || "Failed to update quantity.");
       }
-      return item;
-    }));
+    } catch (error) {
+      console.error("Update error:", error);
+      toast.error(error.message);
+    }
   };
 
   const startEditing = (id, currentQuantity) => {
@@ -47,22 +70,47 @@ const InventoryPage = () => {
     setEditValue(currentQuantity.toString());
   };
 
-  const handleEdit = (id) => {
-    const newQuantity = parseInt(editValue);
+  const handleEdit = async (id) => {
+    const newQuantity = parseInt(editValue, 10);
     if (!isNaN(newQuantity) && newQuantity >= 0) {
-      setInventory(inventory.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      ));
+      try {
+        const response = await fetch(`http://localhost:8080/menu-items/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ quantity: newQuantity }),
+        });
+        
+        const data = await response.json();
+        console.log("Save edit response:", data);
+        
+        if (response.ok) {
+          setInventory(
+            inventory.map((item) =>
+              item.id === id ? { ...item, quantity: newQuantity } : item
+            )
+          );
+          toast.success("Quantity updated successfully!");
+        } else {
+          throw new Error(data.message || "Failed to update quantity.");
+        }
+      } catch (error) {
+        console.error("Save edit error:", error);
+        toast.error(error.message);
+      }
+    } else {
+      toast.error("Invalid quantity. Please enter a valid number.");
     }
     setEditingId(null);
-    setEditValue('');
+    setEditValue("");
   };
 
   return (
     <div>
       <Navbar />
       <div className="min-h-screen bg-gray-50 p-8 mt-20">
-        {lowStockItems.length > 0 && (
+        {lowStockItems.length > 0 ? (
           <div className="mb-8 bg-red-50 rounded-xl shadow-lg p-6">
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle className="text-red-500" />
@@ -84,9 +132,14 @@ const InventoryPage = () => {
               ))}
             </div>
           </div>
+        ) : (
+          <div className="mb-8 bg-green-50 rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold text-green-800">Stock is Full</h2>
+            <p>No items are running low on stock.</p>
+          </div>
         )}
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

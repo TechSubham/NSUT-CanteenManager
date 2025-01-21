@@ -9,7 +9,7 @@ const InventoryCard = ({ item, isLowStock, updateQuantity, startEditing, handleE
       <div className="flex justify-between items-center mb-2">
         <div>
           <h3 className="font-semibold text-lg">{item.name}</h3>
-          <span className="text-sm text-gray-500">{item.category}</span>
+          <span className="text-sm text-gray-500">{item.item_category}</span>
         </div>
         <span className={`font-bold ${isLowStock ? 'text-red-600' : 'text-emerald-600'}`}>
           {isEditing ? (
@@ -29,12 +29,12 @@ const InventoryCard = ({ item, isLowStock, updateQuantity, startEditing, handleE
               </button>
             </div>
           ) : (
-            `${item.quantity} ${item.unit}`
+            `${item.quantity}`
           )}
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-gray-600">₹{item.price}/{item.unit}</span>
+        <span className="text-gray-600">₹{item.selling_price}</span>
         <div className="flex gap-2">
           <button
             onClick={() => updateQuantity(item.id, -1)}
