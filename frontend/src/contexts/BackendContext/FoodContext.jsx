@@ -1,14 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Create the context
 const FoodContext = createContext();
 
-// Custom hook for consuming the context
+
 export function useFood() {
   return useContext(FoodContext);
 }
 
-// Provider Component
 export function FoodProvider({ children }) {
   const [menuItems, setMenuItems] = useState({
     beverages: [],
@@ -19,20 +17,19 @@ export function FoodProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch all menu items on load
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const menuResponse = await fetch('http://localhost:8080/menu-items');
+        const menuResponse = await fetch('https://nsut-canteenmanagerbackend.onrender.com/menu-items');
         const menu = await menuResponse.json();
         console.log("Mennu are ",menu);
-        const mealsResponse = await fetch('http://localhost:8080/menu-items?type=Meals');
+        const mealsResponse = await fetch('https://nsut-canteenmanagerbackend.onrender.com/menu-items?type=Meals');
         const meals = await mealsResponse.json();
         console.log("Meals are ",meals)
-        const snacksResponse = await fetch('http://localhost:8080/menu-items?type=Snacks');
+        const snacksResponse = await fetch('https://nsut-canteenmanagerbackend.onrender.com/menu-items?type=Snacks');
         const snacks = await snacksResponse.json();
         console.log("Snacks are ",snacks)
-        const beveragesResponse = await fetch('http://localhost:8080/menu-items?type=Beverages');
+        const beveragesResponse = await fetch('https://nsut-canteenmanagerbackend.onrender.com/menu-items?type=Beverages');
         const beverages = await beveragesResponse.json();
 
         setMenuItems({ beverages, meals, snacks,menu});
@@ -47,10 +44,9 @@ export function FoodProvider({ children }) {
     fetchMenuItems();
   }, []);
 
-  // Add a new menu item
   const addMenuItem = async (itemData) => {
     try {
-      const response = await fetch('http://localhost:8080/menu-items', {
+      const response = await fetch('https://nsut-canteenmanagerbackend.onrender.com/menu-items', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,10 +71,9 @@ export function FoodProvider({ children }) {
     }
   };
 
-  // Delete a menu item by ID
   const deleteMenuItem = async (id, category) => {
     try {
-      const response = await fetch(`http://localhost:8080/${category.toLowerCase()}/${id}`, {
+      const response = await fetch(`https://nsut-canteenmanagerbackend.onrender.com/${category.toLowerCase()}/${id}`, {
         method: 'DELETE',
       });
 
@@ -98,7 +93,7 @@ export function FoodProvider({ children }) {
   };
   const editMenuItem=async(id,category)=>{
     try{
-      const response=await fetch(`http://localhost:8080/${category.toLowerCase()}/${id}`,{
+      const response=await fetch(`https://nsut-canteenmanagerbackend.onrender.com/${category.toLowerCase()}/${id}`,{
         method:'UPDATE',
       })
       if(response.ok){
