@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "./contexts/authContext";
 import Login from "./Pages/Login/page";
-import HomePage from "./Pages/HomePage/page";
+import HomePage from "./Pages/HomePage/page.jsx";
 import PrivateRoute from "./contexts/authContext/PrivateRoute";
 import Dashboard from "./Pages/Dashboard/main";
 import AddSnackPage from "./components/ui/AddSnackPage";
