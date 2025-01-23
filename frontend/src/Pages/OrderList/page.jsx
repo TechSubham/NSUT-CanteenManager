@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -37,92 +37,92 @@ import Footer from '@/components/ui/Footer';
 
 const OrdersManagementTable = () => {
   const [initialOrders] = useState([
-      
-      {
-        id: "ORD-2024-003",
-        items: [
-          { name: "Vegetarian Pizza", quantity: 2 },
-          { name: "Caesar Salad", quantity: 1 },
-          { name: "Iced Tea", quantity: 2 }
-        ],
-        paymentStatus: "Failed",
-        customerName: "Mike Johnson",
-        price: 52.75,
-        orderDate: "2024-01-14"
-      },
-      {
-        id: "ORD-2024-004",
-        items: [
-          { name: "BBQ Chicken Pizza", quantity: 1 },
-          { name: "Wings", quantity: 2 },
-          { name: "Beer", quantity: 2 }
-        ],
-        paymentStatus: "Paid",
-        customerName: "Sarah Wilson",
-        price: 63.25,
-        orderDate: "2024-01-14"
-      },
-      {
-        id: "ORD-2024-005",
-        items: [
-          { name: "Hawaiian Pizza", quantity: 1 },
-          { name: "Cheesy Bread", quantity: 1 },
-          { name: "Lemonade", quantity: 2 }
-        ],
-        paymentStatus: "Paid",
-        customerName: "David Brown",
-        price: 35.99,
-        orderDate: "2024-01-14"
-      }
-    ,{
-        id: "ORD-2024-001",
-        items: [
-          { name: "Margherita Pizza", quantity: 2 },
-          { name: "Coca Cola", quantity: 3 },
-          { name: "Garlic Bread", quantity: 1 }
-        ],
-        paymentStatus: "Paid",
-        customerName: "John Doe",
-        price: 45.99,
-        orderDate: "2024-01-15"
-      },
-      {
-        id: "ORD-2024-002",
-        items: [
-          { name: "Pepperoni Pizza", quantity: 1 },
-          { name: "Sprite", quantity: 2 }
-        ],
-        paymentStatus: "Pending",
-        customerName: "Jane Smith",
-        price: 28.50,
-        orderDate: "2024-01-15"
-      },
-      {
-        id: "ORD-2024-006",
-        items: [
-          { name: "Pepperoni Pizza", quantity: 1 },
-          { name: "Sprite", quantity: 2 }
-        ],
-        paymentStatus: "Pending",
-        customerName: "Jane Smith",
-        price: 28.50,
-        orderDate: "2024-01-15"
-      },
-      {
-        id: "ORD-2024-007",
-        items: [
-          { name: "Pepperoni Pizza", quantity: 1 },
-          { name: "Sprite", quantity: 2 }
-        ],
-        paymentStatus: "Pending",
-        customerName: "Jane Smith",
-        price: 28.50,
-        orderDate: "2024-01-15"
-      },
+
+    {
+      id: "ORD-2024-003",
+      items: [
+        { name: "Vegetarian Pizza", quantity: 2 },
+        { name: "Caesar Salad", quantity: 1 },
+        { name: "Iced Tea", quantity: 2 }
+      ],
+      paymentStatus: "Failed",
+      customerName: "Mike Johnson",
+      price: 52.75,
+      orderDate: "2024-01-14"
+    },
+    {
+      id: "ORD-2024-004",
+      items: [
+        { name: "BBQ Chicken Pizza", quantity: 1 },
+        { name: "Wings", quantity: 2 },
+        { name: "Beer", quantity: 2 }
+      ],
+      paymentStatus: "Paid",
+      customerName: "Sarah Wilson",
+      price: 63.25,
+      orderDate: "2024-01-14"
+    },
+    {
+      id: "ORD-2024-005",
+      items: [
+        { name: "Hawaiian Pizza", quantity: 1 },
+        { name: "Cheesy Bread", quantity: 1 },
+        { name: "Lemonade", quantity: 2 }
+      ],
+      paymentStatus: "Paid",
+      customerName: "David Brown",
+      price: 35.99,
+      orderDate: "2024-01-14"
+    }
+    , {
+      id: "ORD-2024-001",
+      items: [
+        { name: "Margherita Pizza", quantity: 2 },
+        { name: "Coca Cola", quantity: 3 },
+        { name: "Garlic Bread", quantity: 1 }
+      ],
+      paymentStatus: "Paid",
+      customerName: "John Doe",
+      price: 45.99,
+      orderDate: "2024-01-15"
+    },
+    {
+      id: "ORD-2024-002",
+      items: [
+        { name: "Pepperoni Pizza", quantity: 1 },
+        { name: "Sprite", quantity: 2 }
+      ],
+      paymentStatus: "Pending",
+      customerName: "Jane Smith",
+      price: 28.50,
+      orderDate: "2024-01-15"
+    },
+    {
+      id: "ORD-2024-006",
+      items: [
+        { name: "Pepperoni Pizza", quantity: 1 },
+        { name: "Sprite", quantity: 2 }
+      ],
+      paymentStatus: "Pending",
+      customerName: "Jane Smith",
+      price: 28.50,
+      orderDate: "2024-01-15"
+    },
+    {
+      id: "ORD-2024-007",
+      items: [
+        { name: "Pepperoni Pizza", quantity: 1 },
+        { name: "Sprite", quantity: 2 }
+      ],
+      paymentStatus: "Pending",
+      customerName: "Jane Smith",
+      price: 28.50,
+      orderDate: "2024-01-15"
+    },
   ]);
 
   const [orders, setOrders] = useState(initialOrders);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrders, setSelectedOrders] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ type: '', message: '' });
@@ -151,18 +151,26 @@ const OrdersManagementTable = () => {
     setFilters(prev => ({ ...prev, [field]: value }));
   };
 
+
   const handleCheckboxChange = (orderId, checked) => {
     if (checked) {
-      setSelectedOrder(orders.find(order => order.id === orderId));
-      setDialogOpen(true);
+
+      setSelectedOrders((prev) => [...prev, orderId]);
+      setDialogOpen(true); // Open the dialog when a checkbox is checked
+    } else {
+
+      setSelectedOrders((prev) => prev.filter((id) => id !== orderId));
+      setDialogOpen(false); // Close the dialog when unchecked
     }
   };
+
+
 
   const showAlert = (type, orderId) => {
     const content = {
       type,
       title: type === 'success' ? 'Order Completed Successfully!' : 'Order Failed',
-      message: type === 'success' 
+      message: type === 'success'
         ? `Order ${orderId} has been marked as completed.`
         : `Order ${orderId} has been marked as failed.`,
       icon: type === 'success' ? CheckCircle2 : XCircle,
@@ -178,20 +186,20 @@ const OrdersManagementTable = () => {
 
   const handleOrderStatus = (status) => {
     if (status === 'success') {
-      setOrders(prevOrders => prevOrders.filter(order => order.id !== selectedOrder.id));
-      showAlert('success', selectedOrder.id);
+      setOrders(prevOrders => prevOrders.filter(order => order.id !== selectedOrders.id));
+      showAlert('success', selectedOrders.id);
     } else {
       setOrders(prevOrders =>
         prevOrders.map(order =>
-          order.id === selectedOrder.id
+          order.id === selectedOrders.id
             ? { ...order, paymentStatus: 'Failed' }
             : order
         )
       );
-      showAlert('failed', selectedOrder.id);
+      showAlert('failed', selectedOrders.id);
     }
     setDialogOpen(false);
-    setSelectedOrder(null);
+    setSelectedOrders(null);
   };
 
   const filteredOrders = orders.filter(order => {
@@ -216,7 +224,7 @@ const OrdersManagementTable = () => {
     setCurrentPage(prev => Math.max(prev - 1, 1));
   };
   useEffect(() => {
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
   }, []);
   // Reset to first page when filters change
   React.useEffect(() => {
@@ -225,7 +233,7 @@ const OrdersManagementTable = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <Card className="w-full mt-20">
         <CardContent className="p-6">
           {/* Header section */}
@@ -256,7 +264,7 @@ const OrdersManagementTable = () => {
                 className="pl-8"
               />
             </div>
-            <Select 
+            <Select
               value={filters.paymentStatus}
               onValueChange={(value) => handleFilter('paymentStatus', value)}
             >
@@ -278,7 +286,19 @@ const OrdersManagementTable = () => {
               <TableHeader>
                 <TableRow className="bg-gray-50">
                   <TableHead className="w-12">
-                    <Checkbox />
+                    <Checkbox
+
+                      checked={selectedOrders.length === orders.length && orders.length > 0}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setSelectedOrders(orders.map(order => order.id)); // Select all orders
+                        } else {
+                          setSelectedOrders([]); // Deselect all orders
+                        }
+                      }}
+                    />
+
+
                   </TableHead>
                   <TableHead>Order ID</TableHead>
                   <TableHead className="min-w-[200px]">Ordered Items</TableHead>
@@ -293,9 +313,13 @@ const OrdersManagementTable = () => {
                   <TableRow key={order.id} className="hover:bg-gray-50">
                     <TableCell>
                       <Checkbox
-                        checked={selectedOrder?.id === order.id}
+                        checked={selectedOrders.includes(order.id)} // Check if the order is selected
                         onCheckedChange={(checked) => handleCheckboxChange(order.id, checked)}
                       />
+
+
+
+
                     </TableCell>
                     <TableCell className="font-medium text-blue-600 hover:text-blue-800 whitespace-nowrap">
                       {order.id}
@@ -328,23 +352,24 @@ const OrdersManagementTable = () => {
           {/* Pagination section */}
           <div className="flex justify-between items-center mt-4 py-2">
             <div className="text-sm text-gray-500">
-              <span>{selectedOrder ? 1 : 0} of {filteredOrders.length} row(s) selected</span>
+              <span>{selectedOrders.length} of {filteredOrders.length} row(s) selected</span>
               <span className="ml-4">
                 Page {currentPage} of {totalPages}
               </span>
             </div>
+
             <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={handlePreviousPage}
                 disabled={currentPage === 1}
               >
                 Previous
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
               >
@@ -400,7 +425,7 @@ const OrdersManagementTable = () => {
           </AlertDialogHeader>
         </AlertDialogContent>
       </AlertDialog>
-      <Footer/>
+      <Footer />
     </>
   );
 };

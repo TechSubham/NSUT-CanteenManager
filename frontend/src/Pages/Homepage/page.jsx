@@ -24,7 +24,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-6xl font-bold bg-gradient-to-r from-emerald-600 to-green-500 bg-clip-text text-transparent mb-6">
-              Cateen Pro
+              Canteen Pro
             </h1>
             <p className="text-xl text-emerald-700 mb-10">
               Revolutionize your canteen operations with our intelligent management system

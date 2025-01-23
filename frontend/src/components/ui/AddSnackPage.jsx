@@ -140,10 +140,10 @@ export default function AddSnackPage() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-white shadow-lg rounded-lg overflow-hidden flex"
+          className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col lg:flex-row"
         >
           {/* Image Upload */}
-          <div className="w-1/3 bg-gray-100 p-4 flex items-center justify-center">
+          <div className="lg:w-1/3 bg-gray-100 p-4 flex items-center justify-center">
             {image ? (
               <img
                 src={image}
@@ -166,7 +166,7 @@ export default function AddSnackPage() {
           </div>
 
           {/* Form Fields */}
-          <div className="w-2/3 p-6">
+          <div className="lg:w-2/3 p-6">
             <div className="mb-4">
               <label
                 htmlFor="snackName"
@@ -190,8 +190,8 @@ export default function AddSnackPage() {
               )}
             </div>
 
-            <div className="mb-4 flex space-x-4">
-              <div className="w-1/2">
+            <div className="mb-4 flex flex-col lg:flex-row lg:space-x-4">
+              <div className="lg:w-1/2">
                 <label
                   htmlFor="quantity"
                   className="block text-gray-700 font-semibold mb-2"
@@ -213,7 +213,7 @@ export default function AddSnackPage() {
                   </span>
                 )}
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <label
                   htmlFor="category"
                   className="block text-gray-700 font-semibold mb-2"
@@ -242,8 +242,8 @@ export default function AddSnackPage() {
               </div>
             </div>
 
-            <div className="mb-4 flex space-x-4">
-              <div className="w-1/2">
+            <div className="mb-4 flex flex-col lg:flex-row lg:space-x-4">
+              <div className="lg:w-1/2">
                 <label
                   htmlFor="wholesalePrice"
                   className="block text-gray-700 font-semibold mb-2"
@@ -266,7 +266,7 @@ export default function AddSnackPage() {
                 )}
               </div>
 
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <label
                   htmlFor="sellPrice"
                   className="block text-gray-700 font-semibold mb-2"
@@ -301,5 +301,6 @@ export default function AddSnackPage() {
       </div>
       <Footer />
     </div>
+
   );
 }
