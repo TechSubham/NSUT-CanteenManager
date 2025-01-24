@@ -22,6 +22,7 @@ import Footer from "./components/ui/Footer";
 import React, { useEffect } from "react";
 import { messaging } from "./firebase/firebase";
 import { getToken, onMessage } from "firebase/messaging";
+import Contact from "./Pages/Contact/main";
 
 const App = () => {
   async function requestPermission() {
@@ -62,7 +63,7 @@ const App = () => {
 
   return (
     <>
-      
+
       <Router>
         <AuthProvider>
           <FoodProvider>
@@ -130,6 +131,18 @@ const App = () => {
                     </PrivateRoute>
                   }
                 />
+
+                <Route
+                  path="/contact"
+                  element={
+                    <PrivateRoute>
+                      <Contact />
+                    </PrivateRoute>
+                  }
+                />
+
+
+
                 <Route
                   path="/records"
                   element={

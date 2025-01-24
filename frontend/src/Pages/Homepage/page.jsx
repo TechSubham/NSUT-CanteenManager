@@ -3,6 +3,7 @@ import { ClipboardList, IndianRupee, ShoppingCart, Users, Utensils, ChevronDown 
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from '@/components/ui/Navbar';
 import { Button } from '@/components/ui/button';
+import FooterIcons from '@/components/ui/Footer'
 // Checking for commit 
 const GradientCard = ({ children }) => (
   <div className="bg-gradient-to-br from-emerald-50 to-green-100 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -129,25 +130,8 @@ export default function Home() {
       </section>
 
       {/* Footer-iska ek component hi shi rhega */}
-      <footer className="bg-emerald-900 text-emerald-100 py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-6 md:mb-0">
-              <Utensils size={24} />
-              <span className="text-2xl font-bold">CanteenPro</span>
-            </div>
-            <div className="flex flex-wrap justify-center gap-8">
-              {['Privacy', 'Terms', 'Support', 'Contact'].map((item) => (
-                <a key={item} href="#" className="hover:text-white transition-colors">
-                  {item}
-                </a>
-              ))}
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-emerald-800 text-center text-sm opacity-75">
-            © 2025 CanteenPro. All rights reserved.
-          </div>
-        </div>
+      <footer>
+        <FooterIcons/>
       </footer>
     </div>
   );
