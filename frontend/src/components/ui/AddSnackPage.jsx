@@ -82,34 +82,34 @@ export default function AddSnackPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    const setupNotifications = async () => {
-      try {
-        const permission = await Notification.requestPermission();
-        if (permission === "granted") {
-          const token = await getToken(messaging, {
-            vapidKey:
-              "BCClyLmX0MzHcCFdSvQsfq4JDXodhjXxpd2PhUzTAyRlWYssYeli3IMHY6_CA20ZZHjufQvo4wbCEJzqQxN9ztM",
-          });
+  // useEffect(() => {
+  //   const setupNotifications = async () => {
+  //     try {
+  //       const permission = await Notification.requestPermission();
+  //       if (permission === "granted") {
+  //         const token = await getToken(messaging, {
+  //           vapidKey:
+  //             "BCClyLmX0MzHcCFdSvQsfq4JDXodhjXxpd2PhUzTAyRlWYssYeli3IMHY6_CA20ZZHjufQvo4wbCEJzqQxN9ztM",
+  //         });
 
-          if (token) {
-            await fetch("https://nsut-canteenmanagerbackend.onrender.com/subscribe-to-topic", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ token }),
-            });
-            console.log("Successfully subscribed to notifications");
-          }
-        }
-      } catch (error) {
-        console.error("Error setting up notifications:", error);
-      }
-    };
+  //         if (token) {
+  //           await fetch("https://nsut-canteenmanagerbackend.onrender.com/subscribe-to-topic", {
+  //             method: "POST",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: JSON.stringify({ token }),
+  //           });
+  //           console.log("Successfully subscribed to notifications");
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error setting up notifications:", error);
+  //     }
+  //   };
 
-    setupNotifications();
-  }, []);
+  //   setupNotifications();
+  // }, []);
 
   return (
     <div>

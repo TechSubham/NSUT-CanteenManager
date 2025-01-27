@@ -22,7 +22,7 @@ export function FoodProvider({ children }) {
       try {
         const menuResponse = await fetch('https://nsut-canteenmanagerbackend.onrender.com/menu-items');
         const menu = await menuResponse.json();
-        console.log("Mennu are ",menu);
+        console.log("Menu are ",menu);
         const mealsResponse = await fetch('https://nsut-canteenmanagerbackend.onrender.com/menu-items?type=Meals');
         const meals = await mealsResponse.json();
         console.log("Meals are ",meals)

@@ -20,46 +20,46 @@ import Records from "./Admin/Records/main";
 import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
 import React, { useEffect } from "react";
-import { messaging } from "./firebase/firebase";
-import { getToken, onMessage } from "firebase/messaging";
+// import { messaging } from "./firebase/firebase";
+// import { getToken, onMessage } from "firebase/messaging";
 import Contact from "./Pages/Contact/main";
 
 const App = () => {
-  async function requestPermission() {
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission === "granted") {
-        const token = await getToken(messaging, {
-          vapidKey:
-            "BCClyLmX0MzHcCFdSvQsfq4JDXodhjXxpd2PhUzTAyRlWYssYeli3IMHY6_CA20ZZHjufQvo4wbCEJzqQxN9ztM",
-        });
-        if (token) {
-          console.log("FCM Token:", token);
-        } else {
-          console.error("Failed to generate FCM token.");
-        }
-      } else {
-        alert("Notification permission denied.");
-      }
-    } catch (error) {
-      console.error("Error requesting notification permission:", error);
-    }
-  }
+  // async function requestPermission() {
+  //   try {
+  //     const permission = await Notification.requestPermission();
+  //     if (permission === "granted") {
+  //       const token = await getToken(messaging, {
+  //         vapidKey:
+  //           "BCClyLmX0MzHcCFdSvQsfq4JDXodhjXxpd2PhUzTAyRlWYssYeli3IMHY6_CA20ZZHjufQvo4wbCEJzqQxN9ztM",
+  //       });
+  //       if (token) {
+  //         console.log("FCM Token:", token);
+  //       } else {
+  //         console.error("Failed to generate FCM token.");
+  //       }
+  //     } else {
+  //       alert("Notification permission denied.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error requesting notification permission:", error);
+  //   }
+  // }
 
-  useEffect(() => {
-    requestPermission();
+  // useEffect(() => {
+  //   requestPermission();
 
-    const unsubscribe = onMessage(messaging, (payload) => {
-      console.log("Foreground message received:", payload);
-      const { title, body, image } = payload.notification || {};
-      new Notification(title || "New Notification", {
-        body: body || "You have a new message!",
-        icon: image || "/default-icon.png",
-      });
-    });
+  //   const unsubscribe = onMessage(messaging, (payload) => {
+  //     console.log("Foreground message received:", payload);
+  //     const { title, body, image } = payload.notification || {};
+  //     new Notification(title || "New Notification", {
+  //       body: body || "You have a new message!",
+  //       icon: image || "/default-icon.png",
+  //     });
+  //   });
 
-    return () => unsubscribe();
-  }, []);
+  //   return () => unsubscribe();
+  // }, []);
 
   return (
     <>
