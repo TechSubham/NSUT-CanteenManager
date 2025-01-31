@@ -28,8 +28,8 @@ const Menu = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [itemToEdit, setItemToEdit] = useState(null);
+  // const [editDialogOpen, setEditDialogOpen] = useState(false);
+  // const [itemToEdit, setItemToEdit] = useState(null);
   const itemsPerPage = isMobile ? 5 : 10;
   const navigate = useNavigate();
 
@@ -88,43 +88,43 @@ const Menu = () => {
     }
   };
 
-  const handleEdit = async () => {
-    try {
-      const response = await fetch(`https://nsut-canteenmanagerbackend.onrender.com/menu-items/${itemToEdit.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(itemToEdit),
-      });
-      if (response.ok) {
-        setInventory(inventory.map(item => (item.id === itemToEdit.id ? itemToEdit : item)));
-        setEditDialogOpen(false);
-        setItemToEdit(null);
-      } else {
-        throw new Error('Failed to update item');
-      }
-    } catch (err) {
-      console.error('Error updating item:', err);
-    }
-  };
+  // const handleEdit = async () => {
+  //   try {
+  //     const response = await fetch(`https://nsut-canteenmanagerbackend.onrender.com/menu-items/${itemToEdit.id}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(itemToEdit),
+  //     });
+  //     if (response.ok) {
+  //       setInventory(inventory.map(item => (item.id === itemToEdit.id ? itemToEdit : item)));
+  //       setEditDialogOpen(false);
+  //       setItemToEdit(null);
+  //     } else {
+  //       throw new Error('Failed to update item');
+  //     }
+  //   } catch (err) {
+  //     console.error('Error updating item:', err);
+  //   }
+  // };
 
-  const handleQuantityChange = async (id, action) => {
-    const item = inventory.find(item => item.id === id);
-    if (item) {
-      const updatedQuantity = action === 'increase' ? item.quantity + 1 : Math.max(item.quantity - 1, 0);
-      const response = await fetch(`https://nsut-canteenmanagerbackend.onrender.com/menu-items/${id}/quantity`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...item, quantity: updatedQuantity }),
-      });
-      if (response.ok) {
-        setInventory(inventory.map(i => (i.id === id ? { ...i, quantity: updatedQuantity } : i)));
-      }
-    }
-  };
+  // const handleQuantityChange = async (id, action) => {
+  //   const item = inventory.find(item => item.id === id);
+  //   if (item) {
+  //     const updatedQuantity = action === 'increase' ? item.quantity + 1 : Math.max(item.quantity - 1, 0);
+  //     const response = await fetch(`https://nsut-canteenmanagerbackend.onrender.com/menu-items/${id}/quantity`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ ...item, quantity: updatedQuantity }),
+  //     });
+  //     if (response.ok) {
+  //       setInventory(inventory.map(i => (i.id === id ? { ...i, quantity: updatedQuantity } : i)));
+  //     }
+  //   }
+  // };
 
 const MobileCard = ({ item }) => (
   <Card className="mb-4">
@@ -191,10 +191,10 @@ const MobileCard = ({ item }) => (
           <Trash size={16} />
           </Button>
           <Button
-            onClick={() => {
-              setItemToEdit(item);
-              setEditDialogOpen(true);
-            }}
+            // onClick={() => {
+              // setItemToEdit(item);
+              // setEditDialogOpen(true);
+            // }}
             variant="outline"
             size="sm"
             className="bg-blue-300 hover:bg-blue-200"
@@ -294,7 +294,7 @@ const MobileCard = ({ item }) => (
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Button
-                            onClick={() => handleQuantityChange(item.id, 'decrease')}
+                            // onClick={() => handleQuantityChange(item.id, 'decrease')}
                             variant="outline"
                             size="sm"
                             className="p-1 text-sm text-gray-600 hover:bg-gray-100"
@@ -309,7 +309,7 @@ const MobileCard = ({ item }) => (
                             className="w-12 text-center border border-gray-300 rounded-md text-sm py-1"
                           />
                           <Button
-                            onClick={() => handleQuantityChange(item.id, 'increase')}
+                            // onClick={() => handleQuantityChange(item.id, 'increase')}
                             variant="outline"
                             size="sm"
                             className="p-1 text-sm text-gray-600 hover:bg-gray-100"
@@ -413,7 +413,7 @@ const MobileCard = ({ item }) => (
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        {/* <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Item</DialogTitle>
@@ -484,7 +484,7 @@ const MobileCard = ({ item }) => (
               </Button>
             </DialogFooter>
           </DialogContent>
-      </Dialog>   
+      </Dialog>    */}
     </div>
       <Footer />
     </div>
